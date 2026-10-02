@@ -28,7 +28,7 @@ A section has a kind (`decision`, `file`, `open`, `note`) and may point at the t
 | `record_find` | Addresses and one-line previews for an exact string. Open one with `record_refer`. |
 | `record_list` | Sessions already filed, newest first. Filter with `project`. |
 
-`record_list` returns sessions when you know the project or the title. `record_find` returns addresses when you know a string from the session: a path, an error code, a tool name, a section slug. `record_refer` opens the address.
+`record_list` returns sessions when you know the project or the title. `record_find` returns addresses when you know a string from the session: a path, an error code, a tool name, a section slug. `record_refer` opens the address. Pass `offset` to continue a list or a find. An outline page includes `outline_next_offset` when another page of turn previews remains.
 
 ## Handoff
 
@@ -40,7 +40,7 @@ session-record find "ZX-404" --project widgets
 session-record refer alpha/turns/3
 ```
 
-`sections.json` is an array of sections. `source_ordinal` is the turn number the handoff assigns. Pass `--started-at` to record when the session started. Leave it off and that time is the moment of filing. The command prints the map and the first page of turn previews.
+`sections.json` is an array of sections. `source_ordinal` is the turn number the handoff assigns. Pass `--started-at` to record when the session started. Leave it off and that time is the moment of filing. The command prints the map and the first page of turn previews. Name one section on a session that is already filed with `session-record section SESSION_ID SLUG KIND TITLE BODY`. `--source N` points at the turn.
 
 Filing writes one callback row per turn and per section. The row stores a situating prefix plus the verbatim text, and leaves `embedding_id` empty so a later pass can attach a vector to that same address. `record_find` searches the row and returns addresses and one-line previews. A query needs at least 3 characters.
 
