@@ -178,9 +178,11 @@ def test_mcp_tools_file_and_refer(tmp_path, monkeypatch) -> None:
     names = {tool.name for tool in server.mcp._tool_manager.list_tools()}
     assert names == {
         "record_file",
+        "record_handoff",
         "record_section",
         "record_map",
         "record_refer",
+        "record_find",
         "record_list",
     }
 

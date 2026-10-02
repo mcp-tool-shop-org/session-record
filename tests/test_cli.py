@@ -185,3 +185,110 @@ def test_refer_and_map_need_an_address(args, code, capsys) -> None:
     assert main(args) == 2
     assert "usage:" in capsys.readouterr().err
     assert code is None
+
+
+def test_handoff_then_find(tmp_path, monkeypatch, capsys) -> None:
+    _db(tmp_path, monkeypatch)
+    transcript = tmp_path / "chat_history.jsonl"
+    transcript.write_text(
+        "\n".join(
+            [
+                json.dumps({"type": "system", "content": "SECRET-SYSTEM"}),
+                json.dumps({"type": "user", "content": "Where is the widget licence?"}),
+                json.dumps(
+                    {
+                        "type": "assistant",
+                        "content": "It is MIT.\nSENTINEL-SECOND-LINE",
+                        "tool_calls": [
+                            {
+                                "id": "call_1",
+                                "name": "read_file",
+                                "arguments": '{"target_file": "src/session_record/store.py"}',
+                            }
+                        ],
+                    }
+                ),
+                json.dumps(
+                    {
+                        "type": "tool_result",
+                        "tool_call_id": "call_1",
+                        "content": "Error code ZX-404",
+                    }
+                ),
+            ]
+        ),
+        encoding="utf-8",
+    )
+    sections = tmp_path / "sections.json"
+    sections.write_text(
+        json.dumps(
+            [
+                {
+                    "slug": "licence",
+                    "kind": "decision",
+                    "title": "Licence",
+                    "body": "Stay on MIT.",
+                    "source_ordinal": 1,
+                }
+            ]
+        ),
+        encoding="utf-8",
+    )
+    assert (
+        main(
+            [
+                "handoff",
+                "grok",
+                "alpha",
+                "Licence pass",
+                str(transcript),
+                "--project",
+                "widgets",
+                "--sections",
+                str(sections),
+            ]
+        )
+        == 0
+    )
+    filed = _read(capsys)
+    assert filed["host"] == "grok"
+    assert filed["outline"][1]["preview"] == "It is MIT."
+    assert "SENTINEL-SECOND-LINE" not in json.dumps(filed)
+    assert "SECRET-SYSTEM" not in json.dumps(filed)
+
+    assert main(["find", "ZX-404", "--project", "widgets"]) == 0
+    found = _read(capsys)
+    assert found["matches"][0]["address"] == "alpha/turns/3"
+    assert "text" not in found["matches"][0]
+
+    again = tmp_path / "again.jsonl"
+    again.write_text(
+        json.dumps({"type": "user", "content": "A replaced handoff sentence."}) + "\n",
+        encoding="utf-8",
+    )
+    assert main(["handoff", "grok", "alpha", "Again", str(again), "--replace"]) == 0
+    assert _read(capsys)["title"] == "Again"
+    assert main(["find", "ZX-404"]) == 0
+    assert _read(capsys)["matches"] == []
+
+
+def test_handoff_usage_and_bad_input(tmp_path, monkeypatch, capsys) -> None:
+    _db(tmp_path, monkeypatch)
+    assert main(["handoff"]) == 2
+    assert "usage:" in capsys.readouterr().err
+    assert main(["find"]) == 2
+    assert "usage:" in capsys.readouterr().err
+    assert main(["handoff", "codex", "alpha", "T", "missing.jsonl"]) == 1
+    assert _read(capsys)["error"]["code"] == "bad_host"
+    assert main(["find", "ab"]) == 1
+    assert _read(capsys)["error"]["code"] == "bad_query"
+
+    sections = tmp_path / "sections.json"
+    sections.write_text("{}", encoding="utf-8")
+    transcript = tmp_path / "chat_history.jsonl"
+    transcript.write_text(
+        json.dumps({"type": "user", "content": "hello from the handoff"}) + "\n",
+        encoding="utf-8",
+    )
+    assert main(["handoff", "grok", "alpha", "T", str(transcript), "--sections", str(sections)]) == 1
+    assert _read(capsys)["error"]["code"] == "bad_file"

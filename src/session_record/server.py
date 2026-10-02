@@ -8,6 +8,7 @@ from typing import Any
 
 from mcp.server.mcpserver import MCPServer
 
+from session_record.grok import file_grok_transcript
 from session_record.store import REFER_PAGE, RecordError, RecordStore
 
 mcp = MCPServer(
@@ -18,13 +19,19 @@ session-record stores a session as a record you can refer to later.
 File the turns you still have, and name the decisions, files, and open items
 as sections. Each section points at the turn it came from.
 
+record_handoff reads a Grok chat_history.jsonl from a path. It files the
+turns verbatim. System lines and reasoning lines are skipped. You still name
+the sections.
+
 record_map returns addresses and one-line previews, not the full text.
 record_refer(address) returns one part:
   session id              the map
   session/turns/N         that turn, verbatim
   session/sections/slug   that named section
 
-record_list shows sessions already filed. Use it when you want an older one.
+record_list shows sessions already filed. Use it when you know the project
+or the title. record_find returns addresses for an exact string (a path, an
+error code, a tool name). Open the address with record_refer.
 """,
 )
 
@@ -142,6 +149,52 @@ def record_refer(address: str, offset: int = 0, limit: int = REFER_PAGE) -> dict
     Long text comes back in pages. Pass the next_offset to continue.
     """
     return _call(lambda: get_store().refer(address, offset=offset, limit=limit))
+
+
+@mcp.tool()
+def record_handoff(
+    session_id: str,
+    title: str,
+    transcript_path: str,
+    project: str = "",
+    sections: list[dict[str, Any]] | None = None,
+    replace: bool = False,
+) -> dict[str, Any]:
+    """File a Grok chat_history.jsonl from disk.
+
+    The file is read as-is. User text, assistant text, tool calls, and tool
+    results become turns numbered from 0. System lines and reasoning lines
+    are skipped. sections use source_ordinal on those turn numbers.
+    Returns the map and the first page of turn previews.
+    """
+    return _call(
+        lambda: file_grok_transcript(
+            get_store(),
+            session_id,
+            title,
+            transcript_path,
+            project=project,
+            sections=sections,
+            replace=replace,
+        )
+    )
+
+
+@mcp.tool()
+def record_find(query: str, project: str = "", limit: int = 10) -> dict[str, Any]:
+    """Find addresses that contain an exact string.
+
+    query is at least 3 characters: a path, an error code, a tool name, or a
+    short phrase. The result is addresses and one-line previews.
+    Open one with record_refer.
+    """
+    return _call(
+        lambda: get_store().find(
+            query,
+            project=project or None,
+            limit=limit,
+        )
+    )
 
 
 @mcp.tool()

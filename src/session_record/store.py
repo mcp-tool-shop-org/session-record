@@ -3,6 +3,10 @@
 A session holds verbatim turns and optional named sections. The map is the
 table of contents: section addresses, a tool index, and how to name a turn.
 Full text comes back only from refer.
+
+Each turn and section also gets a callback row: a situating prefix plus the
+verbatim text, indexed for an exact-string lookup. embedding_id stays null
+until a later local embedder assigns a vector id for that same row.
 """
 
 from __future__ import annotations
@@ -21,7 +25,9 @@ KINDS = frozenset({"decision", "file", "open", "note"})
 PREVIEW_LEN = 160
 REFER_PAGE = 4000
 OUTLINE_MAX = 20
+FIND_MAX = 20
 MAX_TEXT = 2_000_000
+SCHEMA_VERSION = 2
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS schema_version (
@@ -65,6 +71,45 @@ CREATE INDEX IF NOT EXISTS idx_turns_tool
     ON turns(session_id, tool_name);
 CREATE INDEX IF NOT EXISTS idx_sections_order
     ON sections(session_id, position);
+"""
+
+# search_text is the lexical index. callback_text is what a later embedder reads.
+# embedding_id is the empty vector slot: null in this version, same idea as a
+# chunk row that has not been added to a vector index yet.
+CALLBACK_SCHEMA = """
+CREATE TABLE IF NOT EXISTS callbacks (
+    id INTEGER PRIMARY KEY,
+    session_id TEXT NOT NULL,
+    address TEXT NOT NULL UNIQUE,
+    unit TEXT NOT NULL,
+    callback_text TEXT NOT NULL,
+    search_text TEXT NOT NULL,
+    embedding_id INTEGER,
+    embedding_model TEXT,
+    FOREIGN KEY (session_id) REFERENCES sessions(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_callbacks_session
+    ON callbacks(session_id);
+
+CREATE VIRTUAL TABLE IF NOT EXISTS callbacks_fts USING fts5(
+    search_text,
+    content='callbacks',
+    content_rowid='id',
+    tokenize='trigram'
+);
+"""
+
+CALLBACK_TRIGGERS = """
+CREATE TRIGGER IF NOT EXISTS callbacks_ai AFTER INSERT ON callbacks BEGIN
+  INSERT INTO callbacks_fts(rowid, search_text)
+  VALUES (new.id, new.search_text);
+END;
+
+CREATE TRIGGER IF NOT EXISTS callbacks_ad AFTER DELETE ON callbacks BEGIN
+  INSERT INTO callbacks_fts(callbacks_fts, rowid, search_text)
+  VALUES ('delete', old.id, old.search_text);
+END;
 """
 
 
@@ -181,9 +226,20 @@ class RecordStore:
     def initialize(self) -> None:
         with self._connect() as connection:
             connection.executescript(SCHEMA)
+            connection.executescript(CALLBACK_SCHEMA)
+            connection.executescript(CALLBACK_TRIGGERS)
             row = connection.execute("SELECT version FROM schema_version").fetchone()
             if row is None:
-                connection.execute("INSERT INTO schema_version (version) VALUES (1)")
+                connection.execute(
+                    "INSERT INTO schema_version (version) VALUES (?)",
+                    (SCHEMA_VERSION,),
+                )
+            elif int(row["version"]) < SCHEMA_VERSION:
+                _backfill_callbacks(connection)
+                connection.execute(
+                    "UPDATE schema_version SET version = ?",
+                    (SCHEMA_VERSION,),
+                )
 
     def file_session(
         self,
@@ -268,6 +324,12 @@ class RecordStore:
                         for section in parsed_sections
                     ],
                 )
+            _write_callbacks(
+                connection,
+                {"id": session_id, "title": title, "project": project, "host": host},
+                parsed_turns,
+                parsed_sections,
+            )
         return self.session_map(session_id)
 
     def add_section(
@@ -330,6 +392,11 @@ class RecordStore:
                     "section_exists",
                     f"Section {section['slug']} is already on session {session_id}.",
                 ) from exc
+            session_row = connection.execute(
+                "SELECT id, title, project, host FROM sessions WHERE id = ?",
+                (session_id,),
+            ).fetchone()
+            _write_callbacks(connection, session_row, [], [section])
         return {
             "address": section_address(session_id, section["slug"]),
             "source": (
@@ -529,6 +596,51 @@ class RecordStore:
         ]
         return {"sessions": sessions, "truncated": truncated}
 
+    def find(
+        self,
+        query: str,
+        *,
+        project: str | None = None,
+        limit: int = 10,
+    ) -> dict[str, Any]:
+        """Return addresses whose callback text contains an exact string.
+
+        The match is case-insensitive and at least 3 characters, so a path,
+        an error code, or a tool name can land on the row. The preview is one
+        line. Full text stays behind refer. embedding_id is not returned.
+        """
+        if limit < 1 or limit > FIND_MAX:
+            raise RecordError("bad_page", f"limit must be from 1 to {FIND_MAX}.")
+        match = _fts_query(query)
+        needle = " ".join(query.split()).casefold()
+        project_name = project.strip() if isinstance(project, str) else ""
+        self.initialize()
+        statement = """
+            SELECT
+                c.address AS address,
+                c.session_id AS session_id,
+                c.unit AS unit,
+                s.title AS session_title
+            FROM callbacks_fts
+            JOIN callbacks c ON c.id = callbacks_fts.rowid
+            JOIN sessions s ON s.id = c.session_id
+            WHERE callbacks_fts MATCH ?
+        """
+        parameters: list[Any] = [match]
+        if project_name:
+            statement += " AND s.project = ?"
+            parameters.append(project_name)
+        statement += " ORDER BY callbacks_fts.rank, c.address LIMIT ?"
+        parameters.append(limit + 1)
+        with self._connect() as connection:
+            try:
+                rows = connection.execute(statement, parameters).fetchall()
+            except sqlite3.OperationalError as exc:
+                raise RecordError("bad_query", "That find text could not be searched.") from exc
+            truncated = len(rows) > limit
+            matches = [_find_match(connection, row, needle) for row in rows[:limit]]
+        return {"matches": matches, "truncated": truncated}
+
 
 def _parse_turn(turn: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(turn, dict):
@@ -629,3 +741,176 @@ def _page(text: str, offset: int, limit: int) -> tuple[str, bool, int | None]:
 
 def _now() -> str:
     return datetime.now(UTC).replace(microsecond=0).isoformat()
+
+
+def _write_callbacks(
+    connection: sqlite3.Connection,
+    session: sqlite3.Row | dict[str, Any],
+    turns: list[Any],
+    sections: list[Any],
+) -> None:
+    rows: list[tuple[str, str, str, str, str]] = []
+    for turn in turns:
+        address = turn_address(str(session["id"]), int(turn["ordinal"]))
+        rows.append(
+            (
+                str(session["id"]),
+                address,
+                "turn",
+                _callback_text(session, turn=turn),
+                _search_text(session, turn=turn),
+            )
+        )
+    for section in sections:
+        address = section_address(str(session["id"]), str(section["slug"]))
+        rows.append(
+            (
+                str(session["id"]),
+                address,
+                "section",
+                _callback_text(session, section=section),
+                _search_text(session, section=section),
+            )
+        )
+    if not rows:
+        return
+    connection.executemany(
+        """
+        INSERT INTO callbacks (session_id, address, unit, callback_text, search_text)
+        VALUES (?, ?, ?, ?, ?)
+        """,
+        rows,
+    )
+
+
+def _backfill_callbacks(connection: sqlite3.Connection) -> None:
+    sessions = connection.execute("SELECT id, title, project, host FROM sessions").fetchall()
+    for session in sessions:
+        already = connection.execute(
+            "SELECT 1 FROM callbacks WHERE session_id = ? LIMIT 1",
+            (session["id"],),
+        ).fetchone()
+        if already is not None:
+            continue
+        turns = connection.execute(
+            """
+            SELECT ordinal, role, tool_name, text
+            FROM turns
+            WHERE session_id = ?
+            ORDER BY ordinal
+            """,
+            (session["id"],),
+        ).fetchall()
+        sections = connection.execute(
+            """
+            SELECT slug, kind, title, body, source_ordinal
+            FROM sections
+            WHERE session_id = ?
+            ORDER BY position
+            """,
+            (session["id"],),
+        ).fetchall()
+        _write_callbacks(connection, session, list(turns), list(sections))
+
+
+def _situating_lines(
+    session: sqlite3.Row | dict[str, Any],
+    *,
+    turn: Any = None,
+    section: Any = None,
+) -> list[str]:
+    lines = [
+        f"session {session['id']}",
+        f"title {session['title']}",
+        f"project {session['project']}",
+        f"host {session['host']}",
+    ]
+    if turn is not None:
+        lines.append(f"turn {int(turn['ordinal'])}")
+        lines.append(f"role {turn['role']}")
+        tool_name = turn["tool_name"] or ""
+        if tool_name:
+            lines.append(f"tool {tool_name}")
+        return lines
+    lines.append(f"section {section['slug']}")
+    lines.append(f"kind {section['kind']}")
+    lines.append(f"section-title {section['title']}")
+    source = section["source_ordinal"] if "source_ordinal" in section.keys() else None
+    if source is not None:
+        lines.append(f"source {int(source)}")
+    return lines
+
+
+def _callback_text(
+    session: sqlite3.Row | dict[str, Any],
+    *,
+    turn: Any = None,
+    section: Any = None,
+) -> str:
+    body = turn["text"] if turn is not None else section["body"]
+    return "\n".join([*_situating_lines(session, turn=turn, section=section), "---", body])
+
+
+def _search_text(
+    session: sqlite3.Row | dict[str, Any],
+    *,
+    turn: Any = None,
+    section: Any = None,
+) -> str:
+    parts = [str(session["id"]), str(session["title"]), str(session["project"])]
+    if turn is not None:
+        tool_name = turn["tool_name"] or ""
+        if tool_name:
+            parts.append(str(tool_name))
+        parts.append(str(turn["text"]))
+    else:
+        parts.extend(
+            [
+                str(section["slug"]),
+                str(section["kind"]),
+                str(section["title"]),
+                str(section["body"]),
+            ]
+        )
+    return "\n".join(parts).casefold()
+
+
+def _fts_query(query: object) -> str:
+    if not isinstance(query, str):
+        raise RecordError("bad_query", "find needs at least 3 characters.")
+    cleaned = " ".join(query.split())
+    if len(cleaned) < 3:
+        raise RecordError("bad_query", "find needs at least 3 characters.")
+    return '"' + cleaned.casefold().replace('"', '""') + '"'
+
+
+def _find_match(connection: sqlite3.Connection, row: sqlite3.Row, needle: str) -> dict[str, Any]:
+    parsed = parse_address(row["address"])
+    if row["unit"] == "turn":
+        found = connection.execute(
+            "SELECT text FROM turns WHERE session_id = ? AND ordinal = ?",
+            (parsed.session_id, parsed.ordinal),
+        ).fetchone()
+        column = "text"
+    else:
+        found = connection.execute(
+            "SELECT body FROM sections WHERE session_id = ? AND slug = ?",
+            (parsed.session_id, parsed.slug),
+        ).fetchone()
+        column = "body"
+    if found is None:
+        raise RecordError("not_found", f"{row['address']} is not in the record.")
+    return {
+        "address": row["address"],
+        "session_id": row["session_id"],
+        "title": row["session_title"],
+        "unit": row["unit"],
+        "preview": _matching_line(found[column], needle),
+    }
+
+
+def _matching_line(text: str, needle: str) -> str:
+    for line in text.splitlines() or [text]:
+        if needle in line.casefold():
+            return preview(line)
+    return preview(text)
