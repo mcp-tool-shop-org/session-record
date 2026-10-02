@@ -142,6 +142,8 @@ def test_file_usage_and_unknown_command(capsys) -> None:
     assert "session/turns/N" in help_text
     assert "session/sections/slug" in help_text
     assert "at least 3 characters" in help_text
+    assert "session-record section" in help_text
+    assert "--offset" in help_text
     assert main(["--version"]) == 0
     assert capsys.readouterr().out.startswith("session-record 0.1.0")
 
@@ -188,6 +190,96 @@ def test_bad_number_and_bad_file_say_what_to_fix(tmp_path, monkeypatch, capsys) 
     error = _read(capsys)["error"]
     assert error["code"] == "bad_file"
     assert error["message"] == "The sections file must be UTF-8."
+
+
+def test_section_and_offsets_continue(tmp_path, monkeypatch, capsys) -> None:
+    _db(tmp_path, monkeypatch)
+    assert main(["section"]) == 2
+    assert "usage:" in capsys.readouterr().err
+
+    first = tmp_path / "first.json"
+    first.write_text(
+        json.dumps(
+            {
+                "turns": [
+                    {"ordinal": 0, "role": "user", "text": "TOKEN one"},
+                    {"ordinal": 1, "role": "user", "text": "TOKEN two"},
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    second = tmp_path / "second.json"
+    second.write_text(
+        json.dumps({"turns": [{"ordinal": 0, "role": "user", "text": "other session"}]}),
+        encoding="utf-8",
+    )
+    assert main(["file", "alpha", "First", str(first), "--project", "widgets"]) == 0
+    _read(capsys)
+    assert main(["file", "beta", "Second", str(second), "--project", "widgets"]) == 0
+    _read(capsys)
+
+    assert (
+        main(
+            [
+                "section",
+                "alpha",
+                "licence",
+                "decision",
+                "Licence",
+                "Stay MIT.",
+                "--source",
+                "0",
+            ]
+        )
+        == 0
+    )
+    named = _read(capsys)
+    assert named["address"] == "alpha/sections/licence"
+    assert named["source"] == "alpha/turns/0"
+    assert main(["refer", "alpha/sections/licence"]) == 0
+    assert _read(capsys)["body"] == "Stay MIT."
+
+    assert main(["find", "TOKEN", "--project", "widgets", "--limit", "1"]) == 0
+    found = _read(capsys)
+    assert found["truncated"] is True
+    assert found["next_offset"] == 1
+    assert (
+        main(
+            [
+                "find",
+                "TOKEN",
+                "--project",
+                "widgets",
+                "--limit",
+                "1",
+                "--offset",
+                str(found["next_offset"]),
+            ]
+        )
+        == 0
+    )
+    rest = _read(capsys)
+    assert rest["truncated"] is False
+    assert rest["next_offset"] is None
+    assert rest["matches"][0]["address"] != found["matches"][0]["address"]
+
+    assert main(["list", "--project", "widgets", "--limit", "1"]) == 0
+    listed = _read(capsys)
+    assert listed["truncated"] is True
+    assert listed["next_offset"] == 1
+    assert (
+        main(
+            ["list", "--project", "widgets", "--limit", "1", "--offset", str(listed["next_offset"])]
+        )
+        == 0
+    )
+    later = _read(capsys)
+    assert later["truncated"] is False
+    assert {listed["sessions"][0]["session_id"], later["sessions"][0]["session_id"]} == {
+        "alpha",
+        "beta",
+    }
 
 
 def test_serve_starts_the_mcp_transport(monkeypatch) -> None:

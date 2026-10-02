@@ -90,16 +90,21 @@ def test_outline_page_is_short_and_does_not_carry_the_body(tmp_path) -> None:
         "alpha/turns/1",
     ]
     assert page["outline_truncated"] is True
+    assert page["outline_next_offset"] == 2
     assert all(len(row["preview"]) <= PREVIEW_LEN for row in page["outline"])
     assert "Second line" not in page["outline"][1]["preview"]
     assert "TS-999" not in str(page["outline"])
 
-    later = store.session_map("alpha", outline_offset=2, outline_limit=1)
+    later = store.session_map("alpha", outline_offset=page["outline_next_offset"], outline_limit=1)
     assert [row["address"] for row in later["outline"]] == ["alpha/turns/4"]
     assert later["outline_truncated"] is False
+    assert later["outline_next_offset"] is None
     with pytest.raises(RecordError) as bad_offset:
         store.session_map("alpha", outline_offset=-1)
     assert bad_offset.value.code == "bad_page"
+    with pytest.raises(RecordError) as past_outline:
+        store.session_map("alpha", outline_offset=20, outline_limit=1)
+    assert past_outline.value.code == "bad_page"
 
 
 def test_section_must_point_at_a_real_turn(tmp_path) -> None:
