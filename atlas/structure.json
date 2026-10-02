@@ -1,0 +1,2082 @@
+{
+  "boundaries": [
+    {
+      "dynamicReads": 0,
+      "dynamicSpawns": 0,
+      "dynamicSpawnsInTests": 0,
+      "dynamicWrites": 0,
+      "entryPoints": [],
+      "externals": 0,
+      "files": [
+        {
+          "hash": "0f7ba6f9f8f783879ee0f2ebe3ac1b750717b9f9af8de92af97f072832016188",
+          "path": ".github/workflows/ci.yml"
+        }
+      ],
+      "globs": [
+        ".github/**"
+      ],
+      "importConfidence": "full",
+      "name": ".github",
+      "origin": "authored",
+      "role": "config",
+      "testedBy": 0,
+      "unresolvedSites": 0
+    },
+    {
+      "dynamicReads": 1,
+      "dynamicSpawns": 0,
+      "dynamicSpawnsInTests": 0,
+      "dynamicWrites": 0,
+      "entryPoints": [],
+      "externals": 0,
+      "files": [
+        {
+          "hash": "63a90e01d9d880c51b99cb635bd6a66270d3db2465671c1b4693d09543fcc3de",
+          "path": ".gitignore"
+        },
+        {
+          "hash": "6c5bb43477cdbfaa01897e74ffaafee1eb16b4c9c7af66f7f780e8c7df5dfeb9",
+          "path": "CHANGELOG.md"
+        },
+        {
+          "hash": "eb4d87e8ad095f9c0cfc1c8bd13910b695bd39bd5e5972064f8b5027df6a3bdc",
+          "path": "LICENSE"
+        },
+        {
+          "hash": "b9d1368271d7ab9ae6809a4f826d472ca38af003ffed04c62397a6507af69fbe",
+          "path": "README.md"
+        },
+        {
+          "hash": "58bbda0da21aaae4e76041b07ec572d97d9cf7ad284bd1a9dc442f420d1d8040",
+          "path": "SCORECARD.md"
+        },
+        {
+          "hash": "ee444d266b212c93e4954047244981f7961de565676b2ffbf920cb2022d08f6b",
+          "path": "SECURITY.md"
+        },
+        {
+          "hash": "105a81364ac65eda6f34cc8d12a1215e9613c2f03dbbc379c034ea91f12a3d59",
+          "path": "SHIP_GATE.md"
+        },
+        {
+          "hash": "faa8f0a2416489e9db968bd142ff35d06473ab00a7f49d0773a8d116064c0839",
+          "path": "codecov.yml"
+        },
+        {
+          "hash": "496a8bde3681d625256dd6727d79e0f7e027db557196530f747e689903213106",
+          "path": "pyproject.toml"
+        },
+        {
+          "exports": [
+            "main"
+          ],
+          "failurePaths": [
+            {
+              "in": "_run",
+              "kind": "raise",
+              "line": 21
+            },
+            {
+              "in": "main",
+              "kind": "raise",
+              "line": 32
+            },
+            {
+              "kind": "raise",
+              "line": 40
+            }
+          ],
+          "hash": "de1584340da19c56f430afe8c6c3a9445a3ebcf567474958884765d27ca7830e",
+          "path": "verify.py"
+        }
+      ],
+      "globs": [
+        "*"
+      ],
+      "importConfidence": "full",
+      "name": "root",
+      "origin": "authored",
+      "role": "config",
+      "testedBy": 0,
+      "unresolvedSites": 0
+    },
+    {
+      "dynamicReads": 0,
+      "dynamicSpawns": 0,
+      "dynamicSpawnsInTests": 0,
+      "dynamicWrites": 1,
+      "entryPoints": [
+        "src/session_record/__main__.py"
+      ],
+      "externals": 0,
+      "files": [
+        {
+          "constantOnly": true,
+          "hash": "27f1a292756b7bb8039b2098b44f27d14d0c15435d9e63c9f021f210a94b2479",
+          "path": "src/session_record/__init__.py"
+        },
+        {
+          "entry": "main",
+          "entryRule": 0,
+          "exports": [
+            "main"
+          ],
+          "failurePaths": [
+            {
+              "in": "main",
+              "kind": "except",
+              "line": 47
+            },
+            {
+              "in": "main",
+              "kind": "except",
+              "line": 49
+            },
+            {
+              "in": "_file",
+              "kind": "raise",
+              "line": 72
+            },
+            {
+              "in": "_file",
+              "kind": "raise",
+              "line": 76
+            },
+            {
+              "in": "_file",
+              "kind": "raise",
+              "line": 78
+            },
+            {
+              "in": "_handoff",
+              "kind": "raise",
+              "line": 98
+            },
+            {
+              "in": "_handoff",
+              "kind": "raise",
+              "line": 107
+            },
+            {
+              "in": "_flags",
+              "kind": "raise",
+              "line": 234
+            },
+            {
+              "in": "_flags",
+              "kind": "raise",
+              "line": 238
+            },
+            {
+              "in": "_read_json",
+              "kind": "except",
+              "line": 245
+            },
+            {
+              "in": "_read_json",
+              "kind": "raise",
+              "line": 246
+            },
+            {
+              "in": "_read_json",
+              "kind": "except",
+              "line": 249
+            },
+            {
+              "in": "_read_json",
+              "kind": "raise",
+              "line": 250
+            },
+            {
+              "in": "_integer",
+              "kind": "except",
+              "line": 261
+            },
+            {
+              "in": "_integer",
+              "kind": "raise",
+              "line": 262
+            }
+          ],
+          "hash": "dd5849bdefefd32fe8e879d39cf568f61c3237c89a277e3c43abfe0425bd773c",
+          "importsFiles": [
+            "src/session_record/__init__.py",
+            "src/session_record/grok.py",
+            "src/session_record/server.py",
+            "src/session_record/store.py"
+          ],
+          "path": "src/session_record/__main__.py",
+          "sequences": [
+            {
+              "calls": [
+                {
+                  "branch": "not args or args[0] == \"serve\"",
+                  "line": 56,
+                  "name": "run",
+                  "target": {
+                    "file": "src/session_record/server.py"
+                  },
+                  "via": "_serve"
+                }
+              ],
+              "exported": true,
+              "invokedAtTopLevel": true,
+              "isDefaultExport": false,
+              "name": "main"
+            },
+            {
+              "calls": [
+                {
+                  "line": 56,
+                  "name": "run",
+                  "target": {
+                    "file": "src/session_record/server.py"
+                  }
+                }
+              ],
+              "exported": false,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "_serve"
+            },
+            {
+              "calls": [
+                {
+                  "line": 246,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_read_json"
+                },
+                {
+                  "branch": "not isinstance(document, dict)",
+                  "line": 72,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  }
+                },
+                {
+                  "branch": "not isinstance(turns, list)",
+                  "line": 76,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  }
+                },
+                {
+                  "branch": "not isinstance(sections, list)",
+                  "line": 78,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  }
+                },
+                {
+                  "line": 213,
+                  "name": "db_path",
+                  "target": {
+                    "file": "src/session_record/server.py"
+                  },
+                  "via": "_store"
+                },
+                {
+                  "line": 213,
+                  "name": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_store"
+                },
+                {
+                  "line": 214,
+                  "name": "initialize",
+                  "receiver": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_store"
+                }
+              ],
+              "exported": false,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "_file"
+            },
+            {
+              "calls": [
+                {
+                  "branch": "host != \"grok\"",
+                  "line": 98,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  }
+                },
+                {
+                  "line": 246,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_read_json"
+                },
+                {
+                  "branch": "not isinstance(loaded, list)",
+                  "line": 107,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  }
+                },
+                {
+                  "line": 213,
+                  "name": "db_path",
+                  "target": {
+                    "file": "src/session_record/server.py"
+                  },
+                  "via": "_store"
+                },
+                {
+                  "line": 213,
+                  "name": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_store"
+                },
+                {
+                  "line": 214,
+                  "name": "initialize",
+                  "receiver": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_store"
+                },
+                {
+                  "line": 109,
+                  "name": "file_grok_transcript",
+                  "target": {
+                    "file": "src/session_record/grok.py"
+                  }
+                }
+              ],
+              "exported": false,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "_handoff"
+            },
+            {
+              "calls": [
+                {
+                  "line": 213,
+                  "name": "db_path",
+                  "target": {
+                    "file": "src/session_record/server.py"
+                  },
+                  "via": "_store"
+                },
+                {
+                  "line": 213,
+                  "name": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_store"
+                },
+                {
+                  "line": 214,
+                  "name": "initialize",
+                  "receiver": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_store"
+                }
+              ],
+              "exported": false,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "_find"
+            },
+            {
+              "calls": [
+                {
+                  "line": 213,
+                  "name": "db_path",
+                  "target": {
+                    "file": "src/session_record/server.py"
+                  },
+                  "via": "_store"
+                },
+                {
+                  "line": 213,
+                  "name": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_store"
+                },
+                {
+                  "line": 214,
+                  "name": "initialize",
+                  "receiver": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_store"
+                }
+              ],
+              "exported": false,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "_section"
+            },
+            {
+              "calls": [
+                {
+                  "line": 213,
+                  "name": "db_path",
+                  "target": {
+                    "file": "src/session_record/server.py"
+                  },
+                  "via": "_store"
+                },
+                {
+                  "line": 213,
+                  "name": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_store"
+                },
+                {
+                  "line": 214,
+                  "name": "initialize",
+                  "receiver": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_store"
+                }
+              ],
+              "exported": false,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "_map"
+            },
+            {
+              "calls": [
+                {
+                  "line": 213,
+                  "name": "db_path",
+                  "target": {
+                    "file": "src/session_record/server.py"
+                  },
+                  "via": "_store"
+                },
+                {
+                  "line": 213,
+                  "name": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_store"
+                },
+                {
+                  "line": 214,
+                  "name": "initialize",
+                  "receiver": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_store"
+                }
+              ],
+              "exported": false,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "_refer"
+            },
+            {
+              "calls": [
+                {
+                  "line": 213,
+                  "name": "db_path",
+                  "target": {
+                    "file": "src/session_record/server.py"
+                  },
+                  "via": "_store"
+                },
+                {
+                  "line": 213,
+                  "name": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_store"
+                },
+                {
+                  "line": 214,
+                  "name": "initialize",
+                  "receiver": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_store"
+                }
+              ],
+              "exported": false,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "_list"
+            },
+            {
+              "calls": [
+                {
+                  "line": 213,
+                  "name": "db_path",
+                  "target": {
+                    "file": "src/session_record/server.py"
+                  }
+                },
+                {
+                  "line": 213,
+                  "name": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  }
+                },
+                {
+                  "line": 214,
+                  "name": "initialize",
+                  "receiver": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  }
+                }
+              ],
+              "exported": false,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "_store"
+            },
+            {
+              "calls": [
+                {
+                  "line": 246,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  }
+                }
+              ],
+              "exported": false,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "_read_json"
+            }
+          ]
+        },
+        {
+          "entry": "file_grok_transcript",
+          "entryRule": 4,
+          "exports": [
+            "file_grok_transcript",
+            "turns_from_grok_jsonl"
+          ],
+          "failurePaths": [
+            {
+              "in": "file_grok_transcript",
+              "kind": "except",
+              "line": 33
+            },
+            {
+              "in": "file_grok_transcript",
+              "kind": "raise",
+              "line": 34
+            },
+            {
+              "in": "file_grok_transcript",
+              "kind": "except",
+              "line": 35
+            },
+            {
+              "in": "file_grok_transcript",
+              "kind": "raise",
+              "line": 36
+            },
+            {
+              "in": "turns_from_grok_jsonl",
+              "kind": "except",
+              "line": 63
+            },
+            {
+              "in": "turns_from_grok_jsonl",
+              "kind": "raise",
+              "line": 64
+            },
+            {
+              "in": "turns_from_grok_jsonl",
+              "kind": "raise",
+              "line": 66
+            },
+            {
+              "in": "turns_from_grok_jsonl",
+              "kind": "raise",
+              "line": 81
+            },
+            {
+              "in": "_append_assistant",
+              "kind": "raise",
+              "line": 97
+            },
+            {
+              "in": "_append_assistant",
+              "kind": "raise",
+              "line": 102
+            },
+            {
+              "in": "_append_assistant",
+              "kind": "raise",
+              "line": 105
+            },
+            {
+              "in": "_append_assistant",
+              "kind": "raise",
+              "line": 108
+            },
+            {
+              "in": "_append_tool_result",
+              "kind": "raise",
+              "line": 124
+            },
+            {
+              "in": "_append_tool_result",
+              "kind": "raise",
+              "line": 133
+            },
+            {
+              "in": "_call_text",
+              "kind": "raise",
+              "line": 146
+            },
+            {
+              "in": "_text_content",
+              "kind": "raise",
+              "line": 155
+            },
+            {
+              "in": "_text_content",
+              "kind": "raise",
+              "line": 163
+            },
+            {
+              "in": "_text_content",
+              "kind": "raise",
+              "line": 168
+            }
+          ],
+          "hash": "a765c574c1c2ad04a53606fe1b844fbe12881922d6b8a1e64f4849c4720a8953",
+          "importsFiles": [
+            "src/session_record/store.py"
+          ],
+          "path": "src/session_record/grok.py",
+          "sequences": [
+            {
+              "calls": [
+                {
+                  "line": 34,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  }
+                },
+                {
+                  "line": 58,
+                  "name": "splitlines",
+                  "target": null,
+                  "via": "turns_from_grok_jsonl"
+                },
+                {
+                  "line": 64,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "turns_from_grok_jsonl"
+                },
+                {
+                  "branch": "not isinstance(item, dict)",
+                  "line": 66,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "turns_from_grok_jsonl"
+                },
+                {
+                  "branch": "not isinstance(content, list)",
+                  "line": 155,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_text_content"
+                },
+                {
+                  "branch": "not isinstance(block, dict)",
+                  "line": 163,
+                  "name": "RecordError",
+                  "over": "content",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_text_content"
+                },
+                {
+                  "branch": "not isinstance(text, str)",
+                  "line": 168,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_text_content"
+                },
+                {
+                  "line": 97,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_append_assistant"
+                },
+                {
+                  "branch": "not isinstance(tool_calls, list)",
+                  "line": 102,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_append_assistant"
+                },
+                {
+                  "branch": "not isinstance(call, dict)",
+                  "line": 105,
+                  "name": "RecordError",
+                  "over": "tool_calls",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_append_assistant"
+                },
+                {
+                  "branch": "not isinstance(name, str) or not name.strip()",
+                  "line": 108,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_append_assistant"
+                },
+                {
+                  "line": 146,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_call_text"
+                },
+                {
+                  "branch": "not isinstance(call_id, str) or call_id not in calls",
+                  "line": 124,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_append_tool_result"
+                },
+                {
+                  "line": 133,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_append_tool_result"
+                },
+                {
+                  "line": 41,
+                  "name": "file_session",
+                  "target": null
+                },
+                {
+                  "line": 51,
+                  "name": "session_map",
+                  "target": null
+                },
+                {
+                  "line": 51,
+                  "name": "OUTLINE_MAX",
+                  "passed": true,
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  }
+                }
+              ],
+              "exported": true,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "file_grok_transcript"
+            },
+            {
+              "calls": [
+                {
+                  "line": 58,
+                  "name": "splitlines",
+                  "target": null
+                },
+                {
+                  "line": 64,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  }
+                },
+                {
+                  "branch": "not isinstance(item, dict)",
+                  "line": 66,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  }
+                },
+                {
+                  "branch": "not isinstance(content, list)",
+                  "line": 155,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_text_content"
+                },
+                {
+                  "branch": "not isinstance(block, dict)",
+                  "line": 163,
+                  "name": "RecordError",
+                  "over": "content",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_text_content"
+                },
+                {
+                  "branch": "not isinstance(text, str)",
+                  "line": 168,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_text_content"
+                },
+                {
+                  "line": 97,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_append_assistant"
+                },
+                {
+                  "branch": "not isinstance(tool_calls, list)",
+                  "line": 102,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_append_assistant"
+                },
+                {
+                  "branch": "not isinstance(call, dict)",
+                  "line": 105,
+                  "name": "RecordError",
+                  "over": "tool_calls",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_append_assistant"
+                },
+                {
+                  "branch": "not isinstance(name, str) or not name.strip()",
+                  "line": 108,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_append_assistant"
+                },
+                {
+                  "line": 146,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_call_text"
+                },
+                {
+                  "branch": "not isinstance(call_id, str) or call_id not in calls",
+                  "line": 124,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_append_tool_result"
+                },
+                {
+                  "line": 133,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_append_tool_result"
+                }
+              ],
+              "exported": true,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "turns_from_grok_jsonl"
+            },
+            {
+              "calls": [
+                {
+                  "line": 97,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  }
+                },
+                {
+                  "branch": "not isinstance(tool_calls, list)",
+                  "line": 102,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  }
+                },
+                {
+                  "branch": "not isinstance(call, dict)",
+                  "line": 105,
+                  "name": "RecordError",
+                  "over": "tool_calls",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  }
+                },
+                {
+                  "branch": "not isinstance(name, str) or not name.strip()",
+                  "line": 108,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  }
+                },
+                {
+                  "line": 146,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_call_text"
+                }
+              ],
+              "exported": false,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "_append_assistant"
+            },
+            {
+              "calls": [
+                {
+                  "branch": "not isinstance(call_id, str) or call_id not in calls",
+                  "line": 124,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  }
+                },
+                {
+                  "branch": "not isinstance(content, list)",
+                  "line": 155,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_text_content"
+                },
+                {
+                  "branch": "not isinstance(block, dict)",
+                  "line": 163,
+                  "name": "RecordError",
+                  "over": "content",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_text_content"
+                },
+                {
+                  "branch": "not isinstance(text, str)",
+                  "line": 168,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "_text_content"
+                },
+                {
+                  "line": 133,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  }
+                }
+              ],
+              "exported": false,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "_append_tool_result"
+            },
+            {
+              "calls": [
+                {
+                  "line": 146,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  }
+                }
+              ],
+              "exported": false,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "_call_text"
+            },
+            {
+              "calls": [
+                {
+                  "branch": "not isinstance(content, list)",
+                  "line": 155,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  }
+                },
+                {
+                  "branch": "not isinstance(block, dict)",
+                  "line": 163,
+                  "name": "RecordError",
+                  "over": "content",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  }
+                },
+                {
+                  "branch": "not isinstance(text, str)",
+                  "line": 168,
+                  "name": "RecordError",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  }
+                }
+              ],
+              "exported": false,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "_text_content"
+            }
+          ]
+        },
+        {
+          "entry": "record_handoff",
+          "entryRule": 4,
+          "exports": [
+            "db_path",
+            "get_store",
+            "record_file",
+            "record_find",
+            "record_handoff",
+            "record_list",
+            "record_map",
+            "record_refer",
+            "record_section"
+          ],
+          "failurePaths": [
+            {
+              "in": "_call",
+              "kind": "except",
+              "line": 59
+            }
+          ],
+          "hash": "5f17356ce7415eb4d03a4fcbc1c773cc6f59e4ac967bca662c6a862c69b95a64",
+          "importsFiles": [
+            "src/session_record/grok.py",
+            "src/session_record/store.py"
+          ],
+          "path": "src/session_record/server.py",
+          "sequences": [
+            {
+              "calls": [
+                {
+                  "line": 51,
+                  "name": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  }
+                },
+                {
+                  "line": 52,
+                  "name": "initialize",
+                  "receiver": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  }
+                }
+              ],
+              "exported": true,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "get_store"
+            },
+            {
+              "calls": [
+                {
+                  "line": 51,
+                  "name": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "get_store"
+                },
+                {
+                  "line": 52,
+                  "name": "initialize",
+                  "receiver": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "get_store"
+                }
+              ],
+              "exported": true,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "record_file"
+            },
+            {
+              "calls": [
+                {
+                  "line": 51,
+                  "name": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "get_store"
+                },
+                {
+                  "line": 52,
+                  "name": "initialize",
+                  "receiver": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "get_store"
+                }
+              ],
+              "exported": true,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "record_section"
+            },
+            {
+              "calls": [
+                {
+                  "line": 51,
+                  "name": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "get_store"
+                },
+                {
+                  "line": 52,
+                  "name": "initialize",
+                  "receiver": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "get_store"
+                }
+              ],
+              "exported": true,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "record_map"
+            },
+            {
+              "calls": [
+                {
+                  "line": 51,
+                  "name": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "get_store"
+                },
+                {
+                  "line": 52,
+                  "name": "initialize",
+                  "receiver": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "get_store"
+                }
+              ],
+              "exported": true,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "record_refer"
+            },
+            {
+              "calls": [
+                {
+                  "line": 51,
+                  "name": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "get_store"
+                },
+                {
+                  "line": 52,
+                  "name": "initialize",
+                  "receiver": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "get_store"
+                },
+                {
+                  "line": 175,
+                  "name": "file_grok_transcript",
+                  "target": {
+                    "file": "src/session_record/grok.py"
+                  }
+                }
+              ],
+              "exported": true,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "record_handoff"
+            },
+            {
+              "calls": [
+                {
+                  "line": 51,
+                  "name": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "get_store"
+                },
+                {
+                  "line": 52,
+                  "name": "initialize",
+                  "receiver": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "get_store"
+                }
+              ],
+              "exported": true,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "record_find"
+            },
+            {
+              "calls": [
+                {
+                  "line": 51,
+                  "name": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "get_store"
+                },
+                {
+                  "line": 52,
+                  "name": "initialize",
+                  "receiver": "RecordStore",
+                  "target": {
+                    "file": "src/session_record/store.py"
+                  },
+                  "via": "get_store"
+                }
+              ],
+              "exported": true,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "record_list"
+            }
+          ]
+        },
+        {
+          "exports": [
+            "check_id",
+            "parse_address",
+            "preview",
+            "section_address",
+            "turn_address"
+          ],
+          "failurePaths": [
+            {
+              "in": "check_id",
+              "kind": "raise",
+              "line": 137
+            },
+            {
+              "in": "parse_address",
+              "kind": "raise",
+              "line": 155
+            },
+            {
+              "in": "parse_address",
+              "kind": "raise",
+              "line": 174
+            },
+            {
+              "in": "_clean_text",
+              "kind": "raise",
+              "line": 192
+            },
+            {
+              "in": "_clean_text",
+              "kind": "raise",
+              "line": 194
+            },
+            {
+              "in": "_clean_title",
+              "kind": "raise",
+              "line": 200
+            },
+            {
+              "in": "_clean_title",
+              "kind": "raise",
+              "line": 203
+            },
+            {
+              "in": "_connect",
+              "kind": "except",
+              "line": 220
+            },
+            {
+              "in": "_connect",
+              "kind": "raise",
+              "line": 222
+            },
+            {
+              "in": "file_session",
+              "kind": "raise",
+              "line": 263
+            },
+            {
+              "in": "file_session",
+              "kind": "raise",
+              "line": 266
+            },
+            {
+              "in": "file_session",
+              "kind": "raise",
+              "line": 273
+            },
+            {
+              "in": "file_session",
+              "kind": "raise",
+              "line": 284
+            },
+            {
+              "in": "add_section",
+              "kind": "raise",
+              "line": 357
+            },
+            {
+              "in": "add_section",
+              "kind": "except",
+              "line": 390
+            },
+            {
+              "in": "add_section",
+              "kind": "raise",
+              "line": 391
+            },
+            {
+              "in": "session_map",
+              "kind": "raise",
+              "line": 419
+            },
+            {
+              "in": "session_map",
+              "kind": "raise",
+              "line": 421
+            },
+            {
+              "in": "session_map",
+              "kind": "raise",
+              "line": 429
+            },
+            {
+              "in": "session_map",
+              "kind": "raise",
+              "line": 466
+            },
+            {
+              "in": "refer",
+              "kind": "raise",
+              "line": 499
+            },
+            {
+              "in": "refer",
+              "kind": "raise",
+              "line": 516
+            },
+            {
+              "in": "refer",
+              "kind": "raise",
+              "line": 538
+            },
+            {
+              "in": "list_sessions",
+              "kind": "raise",
+              "line": 566
+            },
+            {
+              "in": "list_sessions",
+              "kind": "raise",
+              "line": 568
+            },
+            {
+              "in": "list_sessions",
+              "kind": "raise",
+              "line": 592
+            },
+            {
+              "in": "find",
+              "kind": "raise",
+              "line": 630
+            },
+            {
+              "in": "find",
+              "kind": "raise",
+              "line": 632
+            },
+            {
+              "in": "find",
+              "kind": "except",
+              "line": 658
+            },
+            {
+              "in": "find",
+              "kind": "raise",
+              "line": 659
+            },
+            {
+              "in": "find",
+              "kind": "raise",
+              "line": 661
+            },
+            {
+              "in": "_parse_turn",
+              "kind": "raise",
+              "line": 674
+            },
+            {
+              "in": "_parse_turn",
+              "kind": "raise",
+              "line": 677
+            },
+            {
+              "in": "_parse_turn",
+              "kind": "raise",
+              "line": 680
+            },
+            {
+              "in": "_parse_turn",
+              "kind": "raise",
+              "line": 683
+            },
+            {
+              "in": "_parse_turn",
+              "kind": "raise",
+              "line": 686
+            },
+            {
+              "in": "_parse_turn",
+              "kind": "raise",
+              "line": 690
+            },
+            {
+              "in": "_parse_section",
+              "kind": "raise",
+              "line": 708
+            },
+            {
+              "in": "_parse_section",
+              "kind": "raise",
+              "line": 712
+            },
+            {
+              "in": "_parse_section",
+              "kind": "raise",
+              "line": 716
+            },
+            {
+              "in": "_parse_section",
+              "kind": "raise",
+              "line": 718
+            },
+            {
+              "in": "_parse_section",
+              "kind": "raise",
+              "line": 724
+            },
+            {
+              "in": "_page",
+              "kind": "raise",
+              "line": 762
+            },
+            {
+              "in": "_fts_query",
+              "kind": "raise",
+              "line": 907
+            },
+            {
+              "in": "_fts_query",
+              "kind": "raise",
+              "line": 910
+            },
+            {
+              "in": "_find_match",
+              "kind": "raise",
+              "line": 929
+            }
+          ],
+          "hash": "30e13f646072722ed7144e28b4a94313171021c9235901c181e92c838dc50607",
+          "path": "src/session_record/store.py",
+          "sequences": [
+            {
+              "calls": [
+                {
+                  "line": 804,
+                  "name": "executemany",
+                  "target": null
+                }
+              ],
+              "exported": false,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "_write_callbacks"
+            },
+            {
+              "calls": [
+                {
+                  "line": 814,
+                  "name": "execute",
+                  "target": null
+                },
+                {
+                  "line": 804,
+                  "name": "executemany",
+                  "target": null,
+                  "via": "_write_callbacks"
+                }
+              ],
+              "exported": false,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "_backfill_callbacks"
+            },
+            {
+              "calls": [
+                {
+                  "line": 917,
+                  "name": "execute",
+                  "target": null
+                },
+                {
+                  "line": 940,
+                  "name": "splitlines",
+                  "target": null,
+                  "via": "_matching_line"
+                }
+              ],
+              "exported": false,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "_find_match"
+            },
+            {
+              "calls": [
+                {
+                  "line": 940,
+                  "name": "splitlines",
+                  "target": null
+                }
+              ],
+              "exported": false,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "_matching_line"
+            }
+          ]
+        }
+      ],
+      "frameworks": [
+        "mcp"
+      ],
+      "globs": [
+        "src/**"
+      ],
+      "importConfidence": "full",
+      "name": "src",
+      "origin": "authored",
+      "outsidePlaces": [
+        {
+          "reads": 3,
+          "where": [
+            "caller"
+          ],
+          "writes": 0
+        }
+      ],
+      "outsideReads": 3,
+      "role": "code",
+      "testRunners": [
+        "pytest"
+      ],
+      "testedBy": 5,
+      "unresolvedSites": 0
+    },
+    {
+      "dynamicReads": 0,
+      "dynamicSpawns": 0,
+      "dynamicSpawnsInTests": 0,
+      "dynamicWrites": 0,
+      "entryPoints": [],
+      "externals": 0,
+      "files": [
+        {
+          "exports": [
+            "test_find_pages_and_notices_a_missing_row",
+            "test_find_rejects_a_short_query_and_a_bad_limit",
+            "test_find_reports_a_broken_index",
+            "test_find_returns_the_address_and_the_matching_line",
+            "test_replace_and_add_section_keep_the_index_in_step",
+            "test_version_one_rows_grow_callback_entries"
+          ],
+          "hash": "a957fc1fd47d51001947d095542e45ac3220157d33eae310f70091cbc01b189f",
+          "importsFiles": [
+            "src/session_record/store.py"
+          ],
+          "path": "tests/test_callback.py",
+          "testFramework": "pytest"
+        },
+        {
+          "exports": [
+            "test_bad_number_and_bad_file_say_what_to_fix",
+            "test_bad_option_is_a_file_error",
+            "test_default_db_path_is_under_the_home_directory",
+            "test_file_rejects_a_transcript_without_turns",
+            "test_file_replace_and_bad_shapes",
+            "test_file_then_refer_and_list",
+            "test_file_usage_and_unknown_command",
+            "test_handoff_then_find",
+            "test_handoff_usage_and_bad_input",
+            "test_refer_and_map_need_an_address",
+            "test_section_and_offsets_continue",
+            "test_serve_starts_the_mcp_transport",
+            "test_tools_return_errors_as_data"
+          ],
+          "hash": "30081607839ed3c24b5488c0988293d8a67dea0df33e977879c98bfb6a80fba2",
+          "importsFiles": [
+            "src/session_record/__main__.py",
+            "src/session_record/server.py"
+          ],
+          "names": [
+            "src/session_record/store.py"
+          ],
+          "path": "tests/test_cli.py",
+          "testFramework": "pytest"
+        },
+        {
+          "exports": [
+            "test_file_errors_and_mcp_handoff",
+            "test_handoff_files_turns_and_skips_reasoning",
+            "test_parser_rejects_a_bad_line",
+            "test_parser_shapes"
+          ],
+          "hash": "cbef316798529e7dde4191d4a673ad28fd4be24dc0a4001a06d9dd28c2c3d3f4",
+          "importOrder": [
+            "src/session_record/grok.py",
+            "src/session_record/store.py",
+            "src/session_record/server.py"
+          ],
+          "importsFiles": [
+            "src/session_record/grok.py",
+            "src/session_record/server.py",
+            "src/session_record/store.py"
+          ],
+          "path": "tests/test_grok.py",
+          "testFramework": "pytest"
+        },
+        {
+          "exports": [
+            "test_add_section_after_filing",
+            "test_bad_address_names_the_three_forms",
+            "test_list_is_newest_first_and_can_filter_by_project",
+            "test_map_is_addresses_and_refer_returns_the_turn",
+            "test_mcp_tools_file_and_refer",
+            "test_outline_page_is_short_and_does_not_carry_the_body",
+            "test_replace_is_explicit",
+            "test_section_must_point_at_a_real_turn",
+            "test_sessions_do_not_share_turns"
+          ],
+          "hash": "44f073d91fc602b3c24172d4f3d7469f8c1539bdbad0075bf3172a1f0edd5f0f",
+          "importOrder": [
+            "src/session_record/store.py",
+            "src/session_record/server.py"
+          ],
+          "importsFiles": [
+            "src/session_record/server.py",
+            "src/session_record/store.py"
+          ],
+          "path": "tests/test_store.py",
+          "testFramework": "pytest"
+        },
+        {
+          "exports": [
+            "test_blank_preview",
+            "test_oversized_text_is_refused",
+            "test_pages_offsets_and_list_limit",
+            "test_rejected_sessions_name_the_problem",
+            "test_section_without_a_source_and_a_duplicate_name",
+            "test_user_turn_does_not_keep_a_tool_name"
+          ],
+          "hash": "e5db621ed6dd94e413d0ee22f2d81a8acddec08df206af3d5eb17c36663c2247",
+          "importsFiles": [
+            "src/session_record/store.py"
+          ],
+          "path": "tests/test_validation.py",
+          "testFramework": "pytest"
+        }
+      ],
+      "globs": [
+        "tests/**"
+      ],
+      "importConfidence": "full",
+      "name": "tests",
+      "origin": "authored",
+      "role": "test",
+      "testRunners": [
+        "pytest"
+      ],
+      "testedBy": 0,
+      "unresolvedSites": 0
+    }
+  ],
+  "doors": [
+    {
+      "checksCount": 0,
+      "commands": [
+        {
+          "dir": "",
+          "job": "test",
+          "programs": [
+            "pip",
+            "python"
+          ],
+          "step": "Install"
+        },
+        {
+          "dir": "",
+          "job": "test",
+          "programs": [
+            "pip-audit",
+            "python"
+          ],
+          "step": "Audit installed packages"
+        },
+        {
+          "dir": "",
+          "job": "test",
+          "programs": [
+            "pytest"
+          ],
+          "step": "Run tests"
+        },
+        {
+          "dir": "",
+          "job": "test",
+          "programs": [
+            "npx"
+          ],
+          "step": "Check the Atlas map"
+        }
+      ],
+      "elsewhere": [],
+      "file": ".github/workflows/ci.yml",
+      "jobs": [
+        {
+          "basis": "declared",
+          "name": "test",
+          "runsOn": [
+            {
+              "labels": [
+                "ubuntu-latest"
+              ],
+              "platform": {
+                "cpu": "x64",
+                "libc": "glibc",
+                "os": "linux"
+              }
+            }
+          ],
+          "setup": [
+            {
+              "ranges": [
+                {
+                  "from": "3.11",
+                  "range": ">=3.11.0 <3.12.0-0"
+                },
+                {
+                  "from": "3.12",
+                  "range": ">=3.12.0 <3.13.0-0"
+                }
+              ],
+              "step": "Set up Python ${{ matrix.python-version }}",
+              "uses": "actions/setup-python",
+              "version": "${{ matrix.python-version }}"
+            },
+            {
+              "ranges": [
+                {
+                  "from": "22",
+                  "range": ">=22.0.0 <23.0.0-0"
+                }
+              ],
+              "step": "Set up Node",
+              "uses": "actions/setup-node",
+              "version": "22"
+            }
+          ]
+        },
+        {
+          "basis": "declared",
+          "name": "codecov",
+          "runsOn": [
+            {
+              "labels": [
+                "ubuntu-latest"
+              ],
+              "platform": {
+                "cpu": "x64",
+                "libc": "glibc",
+                "os": "linux"
+              }
+            }
+          ]
+        }
+      ],
+      "landings": [],
+      "mentions": [],
+      "name": "CI",
+      "permissions": [
+        "contents:read",
+        "id-token:write"
+      ],
+      "pushes": false,
+      "reach": [
+        {
+          "boundary": "tests",
+          "depth": 0,
+          "files": 5
+        },
+        {
+          "boundary": "src",
+          "depth": 1,
+          "enters": {
+            "file": "src/session_record/store.py",
+            "from": "tests/test_callback.py"
+          },
+          "files": 5
+        }
+      ],
+      "readers": [],
+      "runs": [
+        {
+          "directory": true,
+          "job": "test",
+          "matched": true,
+          "path": "tests/",
+          "runKind": "executes",
+          "via": "pytest pyproject.toml"
+        }
+      ],
+      "runsCount": 1,
+      "secrets": [],
+      "sends": {
+        "deploysPages": false,
+        "dispatchesTo": [],
+        "opensIssues": false,
+        "opensIssuesOnFailure": false,
+        "opensPullRequests": false,
+        "publishes": false,
+        "publishesTo": [],
+        "releases": false
+      },
+      "stages": [],
+      "tests": [
+        {
+          "config": "pyproject.toml",
+          "coverage": true,
+          "files": 5,
+          "job": "test",
+          "junit": true,
+          "runner": "pytest",
+          "step": "Run tests"
+        }
+      ],
+      "triggers": [
+        {
+          "branches": [
+            "main"
+          ],
+          "event": "pull_request"
+        },
+        {
+          "branches": [
+            "main"
+          ],
+          "event": "push"
+        },
+        {
+          "event": "workflow_dispatch"
+        }
+      ],
+      "uses": [
+        "actions/checkout",
+        "actions/download-artifact",
+        "actions/setup-node",
+        "actions/setup-python",
+        "actions/upload-artifact",
+        "codecov/codecov-action"
+      ],
+      "usesWorkflowToken": false
+    },
+    {
+      "checksCount": 0,
+      "commands": [],
+      "elsewhere": [],
+      "file": "pyproject.toml",
+      "kind": "command",
+      "landings": [],
+      "mentions": [],
+      "name": "session-record",
+      "permissions": [],
+      "pushes": false,
+      "reach": [
+        {
+          "boundary": "src",
+          "depth": 0,
+          "files": 5
+        }
+      ],
+      "readers": [],
+      "runs": [
+        {
+          "path": "src/session_record/__main__.py",
+          "runKind": "executes"
+        }
+      ],
+      "runsCount": 1,
+      "secrets": [],
+      "sends": {
+        "deploysPages": false,
+        "dispatchesTo": [],
+        "opensIssues": false,
+        "opensIssuesOnFailure": false,
+        "opensPullRequests": false,
+        "publishes": false,
+        "publishesTo": [],
+        "releases": false
+      },
+      "stages": [],
+      "triggers": [],
+      "uses": [],
+      "usesWorkflowToken": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "root",
+      "kind": "spawns",
+      "to": "src"
+    },
+    {
+      "from": "root",
+      "kind": "spawns",
+      "to": "tests"
+    },
+    {
+      "from": "tests",
+      "fromTests": true,
+      "kind": "file",
+      "to": "src"
+    }
+  ],
+  "engine": "1.26.0",
+  "generatedFrom": {
+    "commit": "ca71a3bba0bdfcaf621e8303e5fb472fa3e64877",
+    "tracked": 21
+  },
+  "landings": [
+    {
+      "readers": [
+        {
+          "by": "pyproject.toml",
+          "call": "configuration",
+          "confidence": "config"
+        }
+      ],
+      "target": "README.md",
+      "writers": []
+    },
+    {
+      "readers": [
+        {
+          "by": "pyproject.toml",
+          "call": "configuration",
+          "confidence": "config"
+        }
+      ],
+      "target": "src/session_record",
+      "writers": []
+    }
+  ],
+  "overlaps": [],
+  "submodules": [],
+  "symlinks": [],
+  "testFiles": 5,
+  "unassigned": []
+}

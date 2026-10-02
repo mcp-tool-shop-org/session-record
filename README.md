@@ -4,7 +4,7 @@ Store a session as a record a later turn can refer to.
 
 When a context window fills, what usually remains is a summary. session-record keeps the session itself: the turns, verbatim, plus named sections for the decisions, files, and open items. The map is a table of contents. Referring to an address returns that one part.
 
-This repo is the graduation of the `context-window-manager` prototype. The prototype froze vLLM KV-cache tensors. This product stores the session as text you can address. Version 0.1.0.
+This repo is the graduation of the `context-window-manager` prototype. The prototype froze vLLM KV-cache tensors. This product stores the session as text you can address. Version 0.1.0, private, Python 3.11 or newer. MIT, see LICENSE. CI runs the tests on Python 3.11 and 3.12.
 
 ## Addresses
 
@@ -73,6 +73,16 @@ The database file is `SESSION_RECORD_DB`. If that is unset, the server uses `.se
 }
 ```
 
+## Trust model
+
+session-record reads the files you name and writes one SQLite file. The path is `SESSION_RECORD_DB`. When that is unset, the file is `.session-record/record.sqlite` under the home directory.
+
+It stores the turns and the sections you file. A Grok handoff skips system lines and reasoning lines, including encrypted reasoning, and does not keep them.
+
+It does not send the session anywhere. There is no telemetry. The process does not open a network connection of its own.
+
+`--replace` overwrites a session that is already filed. The caller passes that flag to ask for the overwrite.
+
 ## Develop
 
 ```bash
@@ -80,6 +90,9 @@ python -m venv .venv
 .venv\Scripts\activate
 pip install -e ".[dev]"
 pytest
+python verify.py
 ```
 
-`pytest` fails when coverage of `session_record` drops below 90%. CI uploads the same report to Codecov, and the project and patch checks use that same 90% bar.
+`pytest` fails when coverage of `session_record` drops below 90%. CI uploads the same report to Codecov, and the project and patch checks use that same 90% bar. `python verify.py` runs the tests, builds a wheel, and checks `--help` and `--version`.
+
+Built by MCP Tool Shop.

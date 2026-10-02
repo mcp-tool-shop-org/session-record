@@ -1,0 +1,211 @@
+{
+  "authorship": {
+    "parts": [],
+    "places": []
+  },
+  "boundaries": [
+    {
+      "breakage": {
+        "coChangesOnly": [],
+        "collapsed": false,
+        "confidence": "low",
+        "importsAndCoChanges": [],
+        "importsOnly": []
+      },
+      "cohesion": null,
+      "cohesionDropped": false,
+      "confidence": "low",
+      "highWater": null,
+      "name": ".github",
+      "qualifyingSourceCommits": 0,
+      "rebaseline": null
+    },
+    {
+      "breakage": {
+        "coChangesOnly": [],
+        "collapsed": false,
+        "confidence": "low",
+        "importsAndCoChanges": [],
+        "importsOnly": []
+      },
+      "cohesion": null,
+      "cohesionDropped": false,
+      "confidence": "low",
+      "highWater": null,
+      "name": "root",
+      "qualifyingSourceCommits": 0,
+      "rebaseline": null
+    },
+    {
+      "breakage": {
+        "coChangesOnly": [],
+        "collapsed": false,
+        "confidence": "low",
+        "importsAndCoChanges": [],
+        "importsOnly": [
+          "root",
+          "tests"
+        ]
+      },
+      "cohesion": null,
+      "cohesionDropped": false,
+      "confidence": "low",
+      "highWater": null,
+      "name": "src",
+      "qualifyingSourceCommits": 3,
+      "rebaseline": null
+    },
+    {
+      "breakage": {
+        "coChangesOnly": [],
+        "collapsed": false,
+        "confidence": "low",
+        "importsAndCoChanges": [],
+        "importsOnly": [
+          "root"
+        ]
+      },
+      "cohesion": null,
+      "cohesionDropped": false,
+      "confidence": "low",
+      "highWater": null,
+      "name": "tests",
+      "qualifyingSourceCommits": 4,
+      "rebaseline": null
+    }
+  ],
+  "churn": {
+    "definition": "commits is how many commits in the window touch the file, including merges and commits dropped from coupling. lines is added plus deleted in those commits.",
+    "files": [
+      {
+        "commits": 1,
+        "lines": 111,
+        "path": ".github/workflows/ci.yml"
+      },
+      {
+        "commits": 2,
+        "lines": 11,
+        "path": ".gitignore"
+      },
+      {
+        "commits": 1,
+        "lines": 21,
+        "path": "LICENSE"
+      },
+      {
+        "commits": 5,
+        "lines": 95,
+        "path": "README.md"
+      },
+      {
+        "commits": 1,
+        "lines": 19,
+        "path": "codecov.yml"
+      },
+      {
+        "commits": 2,
+        "lines": 57,
+        "path": "pyproject.toml"
+      },
+      {
+        "commits": 1,
+        "lines": 3,
+        "path": "src/session_record/__init__.py"
+      },
+      {
+        "commits": 6,
+        "lines": 413,
+        "path": "src/session_record/__main__.py"
+      },
+      {
+        "commits": 2,
+        "lines": 180,
+        "path": "src/session_record/grok.py"
+      },
+      {
+        "commits": 4,
+        "lines": 228,
+        "path": "src/session_record/server.py"
+      },
+      {
+        "commits": 4,
+        "lines": 955,
+        "path": "src/session_record/store.py"
+      },
+      {
+        "commits": 4,
+        "lines": 306,
+        "path": "tests/test_callback.py"
+      },
+      {
+        "commits": 9,
+        "lines": 611,
+        "path": "tests/test_cli.py"
+      },
+      {
+        "commits": 6,
+        "lines": 278,
+        "path": "tests/test_grok.py"
+      },
+      {
+        "commits": 5,
+        "lines": 260,
+        "path": "tests/test_store.py"
+      },
+      {
+        "commits": 6,
+        "lines": 321,
+        "path": "tests/test_validation.py"
+      }
+    ]
+  },
+  "confidence": {
+    "level": "low",
+    "reason": "fewer than 30 qualifying commits in the window, and fewer than 20 source files reach 10 revisions"
+  },
+  "generatedAt": "2026-10-02T23:10:03.468Z",
+  "generatedFrom": {
+    "commit": "ca71a3bba0bdfcaf621e8303e5fb472fa3e64877"
+  },
+  "pairs": [],
+  "parameters": {
+    "appliedChangesetLimit": 5.25,
+    "changeset": 50,
+    "changesetFraction": 0.25,
+    "cohesionDrop": 0.2,
+    "couplingPopulation": "source",
+    "fallenShared": 3,
+    "floor": "fallen",
+    "floorHeld": false,
+    "floorTrigger": "both",
+    "headDate": "2026-10-02T18:44:12-04:00",
+    "inScopeFiles": 21,
+    "pinnedStart": null,
+    "priorFloor": null,
+    "qualifyingCommits": 9,
+    "qualifyingMinimum": 30,
+    "revisions": 5,
+    "shared": 10,
+    "sharedFloorUsed": 3,
+    "since": "2026-04-05T22:44:12.000Z",
+    "sourceExtensions": [
+      ".js",
+      ".mjs",
+      ".cjs",
+      ".jsx",
+      ".ts",
+      ".tsx",
+      ".mts",
+      ".cts",
+      ".py",
+      ".rs",
+      ".gd"
+    ],
+    "sourceFileReach": 20,
+    "sourceFileRise": 25,
+    "sourceFilesReachingStrongFloor": 0,
+    "strength": 0.5,
+    "windowDays": 180
+  },
+  "strengthDefinition": "strength is the shared qualifying commits divided by either. either is the number of qualifying commits that touch either file."
+}

@@ -1,0 +1,160 @@
+{
+  "authored": [
+    ".github/",
+    "root"
+  ],
+  "breaks": [
+    {
+      "doors": 2,
+      "importedBy": [],
+      "importedByTests": [
+        "tests"
+      ],
+      "kind": "part",
+      "name": "src",
+      "partLabel": "src",
+      "spawnedBy": [
+        "root"
+      ]
+    },
+    {
+      "doors": 1,
+      "importedBy": [],
+      "importedByTests": [],
+      "kind": "part",
+      "name": "tests",
+      "partLabel": "tests",
+      "spawnedBy": [
+        "root"
+      ]
+    }
+  ],
+  "changes": {
+    "first": true
+  },
+  "changesTogether": [],
+  "changesTogetherNote": [
+    "Window: 180 days; a pair counts from 3 shared commits, since the window holds fewer than 30 qualifying commits."
+  ],
+  "changesTogetherWithTests": 0,
+  "commit": "ca71a3bba0bdfcaf621e8303e5fb472fa3e64877",
+  "defaultBranch": "main",
+  "derived": "4 parts, mostly Python (11 files). Work enters through 2 doors; the busiest is CI, which reaches 2 parts. People run session-record.",
+  "doors": [
+    {
+      "checks": [],
+      "checksCount": 0,
+      "checksMore": 0,
+      "file": ".github/workflows/ci.yml",
+      "id": ".github/workflows/ci.yml",
+      "landings": [],
+      "name": "CI",
+      "pushes": false,
+      "reach": [
+        {
+          "boundary": "tests",
+          "depth": 0,
+          "files": 5
+        },
+        {
+          "boundary": "src",
+          "depth": 1,
+          "files": 5
+        }
+      ],
+      "runs": [
+        "tests/"
+      ],
+      "runsCount": 1,
+      "runsMore": 0,
+      "sends": [
+        "uploads coverage to Codecov"
+      ],
+      "stages": [],
+      "triggers": [
+        "on a pull request to main",
+        "on a push to main",
+        "or by hand"
+      ]
+    },
+    {
+      "checks": [],
+      "checksCount": 0,
+      "checksMore": 0,
+      "file": "pyproject.toml",
+      "id": "pyproject.toml#session-record",
+      "kind": "command",
+      "landings": [],
+      "name": "session-record",
+      "pushes": false,
+      "reach": [
+        {
+          "boundary": "src",
+          "depth": 0,
+          "files": 5
+        }
+      ],
+      "runs": [
+        "src/session_record/__main__.py"
+      ],
+      "runsCount": 1,
+      "runsMore": 0,
+      "sends": [],
+      "stages": [],
+      "triggers": []
+    }
+  ],
+  "duplicates": [],
+  "duplicatesLead": null,
+  "duplicatesNote": [],
+  "edges": [
+    {
+      "from": "tests",
+      "fromTests": true,
+      "to": "src"
+    }
+  ],
+  "engine": "1.26.0",
+  "generated": [],
+  "generatedAt": "2026-10-02T23:10:03.468Z",
+  "limits": [
+    "1 write and 1 read use paths built at run time and are not named here.",
+    "3 reads go to a path their caller passes, not to this repository.",
+    "Statistics confidence is low: fewer than 30 qualifying commits in the window, and fewer than 20 source files reach 10 revisions."
+  ],
+  "mainDoor": ".github/workflows/ci.yml",
+  "partLabels": {
+    ".github": ".github",
+    "root": "the repository root",
+    "src": "src",
+    "tests": "tests"
+  },
+  "parts": 4,
+  "readers": [],
+  "repo": "mcp-tool-shop-org/session-record",
+  "sequences": [],
+  "startDoor": "pyproject.toml#session-record",
+  "startHere": [
+    "src/session_record/__main__.py",
+    "src/session_record/server.py",
+    "src/session_record/grok.py",
+    "src/session_record/store.py"
+  ],
+  "startReason": "This path follows session-record (a command people run) from its entry, since CI runs only tests.",
+  "summary": "A private Python package that stores a session as addresses a later turn can open.",
+  "summaryFrom": "person",
+  "testFiles": 5,
+  "testedBy": {
+    "src": 5
+  },
+  "testedCodeParts": 1,
+  "unnamedWrites": 1,
+  "unread": [],
+  "unreadFiles": 0,
+  "unreadNote": [],
+  "untested": [],
+  "untestedNote": [
+    "verify.py runs in no workflow."
+  ],
+  "written": 0
+}
