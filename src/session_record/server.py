@@ -159,12 +159,15 @@ def record_handoff(
     project: str = "",
     sections: list[dict[str, Any]] | None = None,
     replace: bool = False,
+    started_at: str = "",
 ) -> dict[str, Any]:
     """File a Grok chat_history.jsonl from disk.
 
     The file is read as-is. User text, assistant text, tool calls, and tool
     results become turns numbered from 0. System lines and reasoning lines
     are skipped. sections use source_ordinal on those turn numbers.
+    started_at records when the session started. Leave it empty and the
+    filing time is used.
     Returns the map and the first page of turn previews.
     """
     return _call(
@@ -176,6 +179,7 @@ def record_handoff(
             project=project,
             sections=sections,
             replace=replace,
+            started_at=started_at or None,
         )
     )
 

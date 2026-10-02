@@ -98,7 +98,7 @@ def _handoff(args: list[str]) -> int:
             "bad_host",
             "This version reads a Grok chat_history.jsonl. Use host grok.",
         )
-    flags = _flags(rest, valued=("--project", "--sections"), switches=("--replace",))
+    flags = _flags(rest, valued=("--project", "--sections", "--started-at"), switches=("--replace",))
     sections: list[Any] = []
     if "--sections" in flags:
         loaded = json.loads(Path(flags["--sections"]).read_text(encoding="utf-8"))
@@ -113,6 +113,7 @@ def _handoff(args: list[str]) -> int:
         project=str(flags.get("--project", "")),
         sections=sections,
         replace="--replace" in flags,
+        started_at=flags.get("--started-at"),
     )
     return _emit(filed)
 
@@ -234,6 +235,8 @@ Usage:
 The JSON file has a turns array and an optional sections array.
 handoff reads chat_history.jsonl. Pass --sections with a JSON array of
 sections whose source_ordinal values match the turns it assigns from 0.
+Pass --started-at to record when the session started. Leave it off and
+that time is the moment of filing.
 find returns addresses and one-line previews. refer returns the text.
 Set SESSION_RECORD_DB to the sqlite file. Otherwise the server uses
 .session-record/record.sqlite under the home directory.
@@ -241,7 +244,7 @@ Set SESSION_RECORD_DB to the sqlite file. Otherwise the server uses
 
 _HANDOFF_USAGE = (
     "usage: session-record handoff grok SESSION_ID TITLE PATH "
-    "[--project P] [--sections PATH] [--replace]"
+    "[--project P] [--sections PATH] [--started-at T] [--replace]"
 )
 
 _FILE_USAGE = (

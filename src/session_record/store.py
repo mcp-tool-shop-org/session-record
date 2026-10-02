@@ -740,7 +740,7 @@ def _page(text: str, offset: int, limit: int) -> tuple[str, bool, int | None]:
 
 
 def _now() -> str:
-    return datetime.now(UTC).replace(microsecond=0).isoformat()
+    return datetime.now(UTC).isoformat(timespec="microseconds")
 
 
 def _write_callbacks(
