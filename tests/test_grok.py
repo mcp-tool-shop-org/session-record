@@ -71,6 +71,7 @@ def test_handoff_files_turns_and_skips_reasoning(tmp_path) -> None:
     )
 
     assert filed["host"] == "grok"
+    assert filed["started_at"] == "2026-04-01T00:00:00+00:00"
     assert filed["turn_count"] == 5
     assert [row["address"] for row in filed["outline"]] == [
         "alpha/turns/0",
@@ -85,19 +86,21 @@ def test_handoff_files_turns_and_skips_reasoning(tmp_path) -> None:
     assert "ENCRYPTED-BLOB" not in json.dumps(filed)
 
     assert store.refer("alpha/turns/0")["text"] == "Where is the widget licence?"
-    assert store.refer("alpha/turns/1")["role"] == "assistant"
+    assert store.refer("alpha/turns/1")["text"] == "It is MIT.\nSENTINEL-SECOND-LINE"
     call = store.refer("alpha/turns/2")
     assert call["tool_name"] == "read_file"
-    assert "store.py" in call["text"]
+    assert call["text"] == '{"target_file": "src/session_record/store.py"}'
     result = store.refer("alpha/turns/3")
     assert result["tool_name"] == "read_file"
-    assert "ZX-404" in result["text"]
+    assert result["text"] == "short\nError code ZX-404\nTAIL-SENTINEL"
     assert store.refer("alpha/turns/4")["text"] == "Thanks"
 
     blob = (tmp_path / "record.sqlite").read_bytes()
     assert b"ENCRYPTED-BLOB" not in blob
     assert b"SECRET-SYSTEM" not in blob
     assert b"HIDDEN-REASONING" not in blob
+    assert b"SENTINEL-SECOND-LINE" in blob
+    assert b"TAIL-SENTINEL" in blob
 
     found = store.find("ZX-404")
     assert found["matches"][0]["address"] == "alpha/turns/3"

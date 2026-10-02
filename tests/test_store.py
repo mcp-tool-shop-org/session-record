@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import sqlite3
+
 import pytest
 
-from session_record.store import PREVIEW_LEN, RecordError, RecordStore
+from session_record.store import PREVIEW_LEN, REFER_PAGE, RecordError, RecordStore
 
 TURNS = [
     {"ordinal": 0, "role": "user", "text": "Where did we leave the licence?"},
@@ -50,6 +52,7 @@ def test_map_is_addresses_and_refer_returns_the_turn(tmp_path) -> None:
     )
 
     assert filed["address"] == "alpha"
+    assert filed["host"] == "claude"
     assert filed["turn_count"] == 3
     assert "outline" not in filed
     assert filed["tools"] == {"pytest": ["alpha/turns/4"]}
@@ -58,13 +61,15 @@ def test_map_is_addresses_and_refer_returns_the_turn(tmp_path) -> None:
     assert "TS-999" not in str(filed)
     assert "Second line" not in str(filed)
 
+    body = TURNS[2]["text"]
     turn = store.refer("alpha/turns/4")
-    assert turn["text"].startswith("Error code TS-999")
+    assert turn["text"] == body[:REFER_PAGE]
+    assert len(turn["text"]) == REFER_PAGE
     assert turn["continued"] is True
     assert turn["tool_name"] == "pytest"
     rest = store.refer("alpha/turns/4", offset=turn["next_offset"])
+    assert rest["text"] == body[REFER_PAGE:]
     assert rest["continued"] is False
-    assert "TS-999" not in rest["text"]
 
     section = store.refer("alpha/sections/licence")
     assert section["body"] == "The package stays MIT."
@@ -88,6 +93,13 @@ def test_outline_page_is_short_and_does_not_carry_the_body(tmp_path) -> None:
     assert all(len(row["preview"]) <= PREVIEW_LEN for row in page["outline"])
     assert "Second line" not in page["outline"][1]["preview"]
     assert "TS-999" not in str(page["outline"])
+
+    later = store.session_map("alpha", outline_offset=2, outline_limit=1)
+    assert [row["address"] for row in later["outline"]] == ["alpha/turns/4"]
+    assert later["outline_truncated"] is False
+    with pytest.raises(RecordError) as bad_offset:
+        store.session_map("alpha", outline_offset=-1)
+    assert bad_offset.value.code == "bad_page"
 
 
 def test_section_must_point_at_a_real_turn(tmp_path) -> None:
@@ -128,14 +140,31 @@ def test_add_section_after_filing(tmp_path) -> None:
 
 def test_list_is_newest_first_and_can_filter_by_project(tmp_path) -> None:
     store = _store(tmp_path)
-    store.file_session("older", "First", [TURNS[0]], project="widgets", started_at="2026-01-01T00:00:00+00:00")
-    store.file_session("newer", "Second", [TURNS[0]], project="other", started_at="2026-02-01T00:00:00+00:00")
+    store.file_session("a", "First", [TURNS[0]], project="widgets", started_at="2026-01-01T00:00:00+00:00")
+    store.file_session("b", "Second", [TURNS[0]], project="other", started_at="2026-03-01T00:00:00+00:00")
+    store.file_session("c", "Third", [TURNS[0]], project="widgets", started_at="2026-02-01T00:00:00+00:00")
+    connection = sqlite3.connect(store.path)
+    connection.executemany(
+        "UPDATE sessions SET filed_at = ? WHERE id = ?",
+        [
+            ("2026-06-01T00:00:00+00:00", "a"),
+            ("2026-04-01T00:00:00+00:00", "b"),
+            ("2026-05-01T00:00:00+00:00", "c"),
+        ],
+    )
+    connection.commit()
+    connection.close()
 
     listed = store.list_sessions()
-    assert [row["session_id"] for row in listed["sessions"]] == ["newer", "older"]
+    assert [row["session_id"] for row in listed["sessions"]] == ["a", "c", "b"]
+    assert [row["filed_at"] for row in listed["sessions"]] == [
+        "2026-06-01T00:00:00+00:00",
+        "2026-05-01T00:00:00+00:00",
+        "2026-04-01T00:00:00+00:00",
+    ]
     widgets = store.list_sessions(project="widgets")
-    assert [row["session_id"] for row in widgets["sessions"]] == ["older"]
-    assert widgets["sessions"][0]["address"] == "older"
+    assert [row["session_id"] for row in widgets["sessions"]] == ["a", "c"]
+    assert widgets["sessions"][0]["address"] == "a"
 
 
 def test_replace_is_explicit(tmp_path) -> None:
@@ -147,8 +176,9 @@ def test_replace_is_explicit(tmp_path) -> None:
     replaced = store.file_session("alpha", "Again", [TURNS[0]], replace=True)
     assert replaced["title"] == "Again"
     assert replaced["turn_count"] == 1
-    with pytest.raises(RecordError):
+    with pytest.raises(RecordError) as gone:
         store.refer("alpha/turns/4")
+    assert gone.value.code == "not_found"
 
 
 def test_sessions_do_not_share_turns(tmp_path) -> None:
@@ -192,3 +222,7 @@ def test_bad_address_names_the_three_forms(tmp_path) -> None:
     with pytest.raises(RecordError) as caught:
         store.refer("../secret")
     assert caught.value.code == "bad_address"
+    message = str(caught.value)
+    assert "session id" in message
+    assert "session/turns/N" in message
+    assert "session/sections/slug" in message

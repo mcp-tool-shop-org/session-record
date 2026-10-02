@@ -74,7 +74,8 @@ def test_find_returns_the_address_and_the_matching_line(tmp_path) -> None:
 
     tool_hits = store.find("read_file")
     assert tool_hits["matches"][0]["address"] == "alpha/turns/4"
-    assert "read_file" not in tool_hits["matches"][0]["preview"]
+    assert tool_hits["matches"][0]["preview"] == "intro stays off the preview"
+    assert "TAIL-SENTINEL" not in tool_hits["matches"][0]["preview"]
 
     section = store.find("stay on mit")
     assert section["matches"][0]["address"] == "alpha/sections/licence"
@@ -184,7 +185,15 @@ def test_find_pages_and_notices_a_missing_row(tmp_path) -> None:
     )
     page = store.find("SAME-TOKEN", limit=2)
     assert page["truncated"] is True
-    assert len(page["matches"]) == 2
+    addresses = [row["address"] for row in page["matches"]]
+    assert len(addresses) == len(set(addresses)) == 2
+    assert set(addresses) <= {
+        "alpha/turns/0",
+        "alpha/turns/1",
+        "alpha/turns/2",
+        "alpha/sections/note1",
+    }
+    assert all("SAME-TOKEN" in row["preview"] for row in page["matches"])
 
     connection = sqlite3.connect(store.path)
     connection.execute("DELETE FROM turns WHERE session_id = 'alpha' AND ordinal = 0")

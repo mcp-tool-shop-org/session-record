@@ -66,6 +66,8 @@ def test_file_then_refer_and_list(tmp_path, monkeypatch, capsys) -> None:
     )
     filed = _read(capsys)
     assert filed["address"] == "alpha"
+    assert filed["host"] == "claude"
+    assert filed["started_at"] == "2026-04-01T00:00:00+00:00"
     assert filed["sections"][0]["source"] == "alpha/turns/0"
     assert "TS-999" not in json.dumps(filed)
 
@@ -138,15 +140,15 @@ def test_file_usage_and_unknown_command(capsys) -> None:
 def test_serve_starts_the_mcp_transport(monkeypatch) -> None:
     import session_record.server as server
 
-    seen: dict[str, str] = {}
+    seen: list[str] = []
 
-    def fake_run(transport: str = "stdio") -> None:
-        seen["transport"] = transport
+    def fake_run(transport: str) -> None:
+        seen.append(transport)
 
     monkeypatch.setattr(server.mcp, "run", fake_run)
     assert main([]) == 0
     assert main(["serve"]) == 0
-    assert seen["transport"] == "stdio"
+    assert seen == ["stdio", "stdio"]
 
 
 def test_tools_return_errors_as_data(tmp_path, monkeypatch) -> None:
@@ -212,7 +214,7 @@ def test_handoff_then_find(tmp_path, monkeypatch, capsys) -> None:
                     {
                         "type": "tool_result",
                         "tool_call_id": "call_1",
-                        "content": "Error code ZX-404",
+                        "content": "short\nError code ZX-404\nTAIL-SENTINEL",
                     }
                 ),
             ]
@@ -255,6 +257,11 @@ def test_handoff_then_find(tmp_path, monkeypatch, capsys) -> None:
     assert filed["outline"][1]["preview"] == "It is MIT."
     assert "SENTINEL-SECOND-LINE" not in json.dumps(filed)
     assert "SECRET-SYSTEM" not in json.dumps(filed)
+
+    assert main(["refer", "alpha/turns/1"]) == 0
+    assert _read(capsys)["text"] == "It is MIT.\nSENTINEL-SECOND-LINE"
+    assert main(["refer", "alpha/turns/3"]) == 0
+    assert _read(capsys)["text"] == "short\nError code ZX-404\nTAIL-SENTINEL"
 
     assert main(["find", "ZX-404", "--project", "widgets"]) == 0
     found = _read(capsys)

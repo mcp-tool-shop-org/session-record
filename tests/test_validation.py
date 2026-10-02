@@ -7,6 +7,7 @@ import pytest
 from session_record.store import (
     MAX_TEXT,
     PREVIEW_LEN,
+    REFER_PAGE,
     RecordError,
     preview,
     RecordStore,
@@ -148,13 +149,28 @@ def test_user_turn_does_not_keep_a_tool_name(tmp_path) -> None:
     filed = store.file_session(
         "alpha",
         "T",
-        [_turn(role="assistant", tool_name="pytest", text="noted")],
+        [_turn(role="user", tool_name="pytest", text="noted")],
         project=None,
         host=None,
         started_at="  ",
     )
     assert filed["tools"] == {}
+    assert filed["started_at"] != "  "
+    assert "T" in filed["started_at"]
     assert store.refer("alpha/turns/0")["tool_name"] == ""
+    system = store.file_session(
+        "beta",
+        "T",
+        [_turn(role="system", tool_name="pytest", text="noted")],
+    )
+    assert system["tools"] == {}
+    assert store.refer("beta/turns/0")["tool_name"] == ""
+    tool = store.file_session(
+        "gamma",
+        "T",
+        [_turn(role="tool", tool_name="pytest", text="ran")],
+    )
+    assert tool["tools"] == {"pytest": ["gamma/turns/0"]}
 
 
 def test_section_without_a_source_and_a_duplicate_name(tmp_path) -> None:
@@ -187,23 +203,36 @@ def test_pages_offsets_and_list_limit(tmp_path) -> None:
     with pytest.raises(RecordError) as page:
         store.refer("alpha/turns/0", offset=10_000)
     assert page.value.code == "bad_page"
-    with pytest.raises(RecordError):
+    with pytest.raises(RecordError) as negative:
         store.refer("alpha/turns/0", offset=-1)
-    clamped = store.refer("alpha/turns/0", limit=10_000)
-    assert clamped["continued"] is False
+    assert negative.value.code == "bad_page"
+    whole = store.refer("alpha/turns/0", limit=10_000)
+    assert whole["continued"] is False
+    long_body = "p" * (REFER_PAGE + 25)
+    store.file_session("paged", "T", [_turn(text=long_body)])
+    clamped = store.refer("paged/turns/0", limit=10_000)
+    assert len(clamped["text"]) == REFER_PAGE
+    assert clamped["text"] == long_body[:REFER_PAGE]
+    assert clamped["continued"] is True
+    remainder = store.refer("paged/turns/0", offset=clamped["next_offset"])
+    assert remainder["text"] == long_body[REFER_PAGE:]
+    assert remainder["continued"] is False
 
     with pytest.raises(RecordError) as outline_error:
         store.session_map("alpha", outline_limit=21)
     assert outline_error.value.code == "bad_page"
-    with pytest.raises(RecordError):
+    with pytest.raises(RecordError) as outline_negative:
         store.session_map("alpha", outline_offset=-1)
+    assert outline_negative.value.code == "bad_page"
     with pytest.raises(RecordError) as absent:
         store.session_map("missing")
     assert absent.value.code == "not_found"
-    with pytest.raises(RecordError):
+    with pytest.raises(RecordError) as empty_address:
         store.refer("")
-    with pytest.raises(RecordError):
+    assert empty_address.value.code == "bad_address"
+    with pytest.raises(RecordError) as missing_turn:
         store.refer("alpha/turns/9")
+    assert missing_turn.value.code == "not_found"
 
     for index in range(3):
         store.file_session(f"s{index}", "T", [_turn()], project="")
