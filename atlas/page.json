@@ -30,14 +30,32 @@
     }
   ],
   "changes": {
-    "first": true
+    "fileCounts": {
+      "added": 0,
+      "changed": 3,
+      "moved": 0,
+      "parts": 2,
+      "removed": 0
+    },
+    "items": [
+      {
+        "kind": "counts",
+        "sentence": "Nothing structural changed since 2026-10-02; 3 files changed content.",
+        "subjects": []
+      }
+    ],
+    "since": {
+      "commit": "ca71a3bba0bdfcaf621e8303e5fb472fa3e64877",
+      "generatedAt": "2026-10-02T23:10:03.468Z"
+    },
+    "unchanged": true
   },
   "changesTogether": [],
   "changesTogetherNote": [
     "Window: 180 days; a pair counts from 3 shared commits, since the window holds fewer than 30 qualifying commits."
   ],
   "changesTogetherWithTests": 0,
-  "commit": "ca71a3bba0bdfcaf621e8303e5fb472fa3e64877",
+  "commit": "59a35914e7160ba2626b265bb30e215b1dc456ea",
   "defaultBranch": "main",
   "derived": "4 parts, mostly Python (11 files). Work enters through 2 doors; the busiest is CI, which reaches 2 parts. People run session-record.",
   "doors": [
@@ -116,11 +134,11 @@
   ],
   "engine": "1.26.0",
   "generated": [],
-  "generatedAt": "2026-10-02T23:10:03.468Z",
+  "generatedAt": "2026-10-02T23:11:36.985Z",
   "limits": [
     "1 write and 1 read use paths built at run time and are not named here.",
     "3 reads go to a path their caller passes, not to this repository.",
-    "Statistics confidence is low: fewer than 30 qualifying commits in the window, and fewer than 20 source files reach 10 revisions."
+    "Statistics confidence is low: fewer than 30 qualifying commits in the window, and fewer than 25 source files reach 10 revisions."
   ],
   "mainDoor": ".github/workflows/ci.yml",
   "partLabels": {

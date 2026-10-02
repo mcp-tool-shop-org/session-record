@@ -16,3 +16,7 @@ Current version: 0.1.0.
 - Page a map outline with `outline_offset`.
 - Name one section from the shell with `session-record section`.
 - A ship gate, this changelog, and `verify.py` (tests, a wheel, and a CLI smoke check).
+
+### Fixed
+
+- CI upgrades setuptools before `pip-audit`. The Python 3.11 image ships setuptools 79.0.1, which the audit flags.

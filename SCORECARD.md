@@ -37,7 +37,7 @@ Skipped lines are the ones that do not fit this private 0.1.0 tree, or that this
 | manifest version-tag | skipped (no semver tag) |
 | ci dependency-scan | passed (`pip-audit`) |
 | ci provenance | skipped (no npm publish) |
-| deps | passed (no npm tree; Dependabot alerts enabled) |
+| deps | passed (no npm tree; Dependabot alerts enabled). The first CI run on Python 3.11 flagged the image's setuptools 79.0.1; CI upgrades setuptools before `pip-audit`. |
 | identity scan of the git-tracked tree | CLEAN |
 
 ## Map

@@ -9,7 +9,7 @@
       "externals": 0,
       "files": [
         {
-          "hash": "0f7ba6f9f8f783879ee0f2ebe3ac1b750717b9f9af8de92af97f072832016188",
+          "hash": "4c37a8ea1bef93aebdd1cae0b0c0add67c6f7a39669c32a116c30c963d39b86b",
           "path": ".github/workflows/ci.yml"
         }
       ],
@@ -36,7 +36,7 @@
           "path": ".gitignore"
         },
         {
-          "hash": "6c5bb43477cdbfaa01897e74ffaafee1eb16b4c9c7af66f7f780e8c7df5dfeb9",
+          "hash": "fe53eda5bcce9b192d756c7ba70173307d22aa36a708c52a9a40933b973185bb",
           "path": "CHANGELOG.md"
         },
         {
@@ -48,7 +48,7 @@
           "path": "README.md"
         },
         {
-          "hash": "58bbda0da21aaae4e76041b07ec572d97d9cf7ad284bd1a9dc442f420d1d8040",
+          "hash": "8584ee7ab5b5d792a83f999efd3573061f70b685ed49e9ca0a3ce0a798da5066",
           "path": "SCORECARD.md"
         },
         {
@@ -2047,7 +2047,7 @@
   ],
   "engine": "1.26.0",
   "generatedFrom": {
-    "commit": "ca71a3bba0bdfcaf621e8303e5fb472fa3e64877",
+    "commit": "59a35914e7160ba2626b265bb30e215b1dc456ea",
     "tracked": 21
   },
   "landings": [

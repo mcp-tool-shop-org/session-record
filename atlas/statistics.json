@@ -78,8 +78,8 @@
     "definition": "commits is how many commits in the window touch the file, including merges and commits dropped from coupling. lines is added plus deleted in those commits.",
     "files": [
       {
-        "commits": 1,
-        "lines": 111,
+        "commits": 2,
+        "lines": 126,
         "path": ".github/workflows/ci.yml"
       },
       {
@@ -89,13 +89,58 @@
       },
       {
         "commits": 1,
+        "lines": 18,
+        "path": "CHANGELOG.md"
+      },
+      {
+        "commits": 1,
         "lines": 21,
         "path": "LICENSE"
       },
       {
-        "commits": 5,
-        "lines": 95,
+        "commits": 6,
+        "lines": 112,
         "path": "README.md"
+      },
+      {
+        "commits": 1,
+        "lines": 45,
+        "path": "SCORECARD.md"
+      },
+      {
+        "commits": 1,
+        "lines": 28,
+        "path": "SECURITY.md"
+      },
+      {
+        "commits": 1,
+        "lines": 76,
+        "path": "SHIP_GATE.md"
+      },
+      {
+        "commits": 1,
+        "lines": 79,
+        "path": "atlas/README.md"
+      },
+      {
+        "commits": 1,
+        "lines": 18,
+        "path": "atlas/boundaries.yaml"
+      },
+      {
+        "commits": 1,
+        "lines": 160,
+        "path": "atlas/page.json"
+      },
+      {
+        "commits": 1,
+        "lines": 211,
+        "path": "atlas/statistics.json"
+      },
+      {
+        "commits": 1,
+        "lines": 2082,
+        "path": "atlas/structure.json"
       },
       {
         "commits": 1,
@@ -156,20 +201,25 @@
         "commits": 6,
         "lines": 321,
         "path": "tests/test_validation.py"
+      },
+      {
+        "commits": 1,
+        "lines": 40,
+        "path": "verify.py"
       }
     ]
   },
   "confidence": {
     "level": "low",
-    "reason": "fewer than 30 qualifying commits in the window, and fewer than 20 source files reach 10 revisions"
+    "reason": "fewer than 30 qualifying commits in the window, and fewer than 25 source files reach 10 revisions"
   },
-  "generatedAt": "2026-10-02T23:10:03.468Z",
+  "generatedAt": "2026-10-02T23:11:36.985Z",
   "generatedFrom": {
-    "commit": "ca71a3bba0bdfcaf621e8303e5fb472fa3e64877"
+    "commit": "59a35914e7160ba2626b265bb30e215b1dc456ea"
   },
   "pairs": [],
   "parameters": {
-    "appliedChangesetLimit": 5.25,
+    "appliedChangesetLimit": 6.5,
     "changeset": 50,
     "changesetFraction": 0.25,
     "cohesionDrop": 0.2,
@@ -178,16 +228,16 @@
     "floor": "fallen",
     "floorHeld": false,
     "floorTrigger": "both",
-    "headDate": "2026-10-02T18:44:12-04:00",
-    "inScopeFiles": 21,
+    "headDate": "2026-10-02T19:10:16-04:00",
+    "inScopeFiles": 26,
     "pinnedStart": null,
-    "priorFloor": null,
+    "priorFloor": "fallen",
     "qualifyingCommits": 9,
     "qualifyingMinimum": 30,
     "revisions": 5,
     "shared": 10,
     "sharedFloorUsed": 3,
-    "since": "2026-04-05T22:44:12.000Z",
+    "since": "2026-04-05T23:10:16.000Z",
     "sourceExtensions": [
       ".js",
       ".mjs",

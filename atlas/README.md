@@ -1,6 +1,6 @@
 # session-record: how it works
 
-Mapped at 2026-10-02 from commit ca71a3b by Atlas 1.26.0.
+Mapped at 2026-10-02 from commit 59a3591 by Atlas 1.26.0.
 
 ## What this is
 
@@ -8,9 +8,9 @@ A private Python package that stores a session as addresses a later turn can ope
 
 4 parts, mostly Python (11 files). Work enters through 2 doors; the busiest is CI, which reaches 2 parts. People run session-record.
 
-## What changed since the last map
+## What changed since 2026-10-02 (ca71a3b)
 
-This is the first map.
+Nothing structural changed since 2026-10-02; 3 files changed content.
 
 ## What comes in
 
@@ -74,6 +74,6 @@ Read those in order to follow one run of session-record end to end. This path fo
 
 - 1 write and 1 read use paths built at run time and are not named here.
 - 3 reads go to a path their caller passes, not to this repository.
-- Statistics confidence is low: fewer than 30 qualifying commits in the window, and fewer than 20 source files reach 10 revisions.
+- Statistics confidence is low: fewer than 30 qualifying commits in the window, and fewer than 25 source files reach 10 revisions.
 
 Regenerate with `npx --yes @dogfood-lab/atlas map`.
