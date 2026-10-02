@@ -129,6 +129,7 @@ def record_map(
 
     Sections and the tool index are always included.
     Set outline_limit (max 20) to page through one-line turn previews.
+    When outline_next_offset is set, pass it as outline_offset to continue.
     Full text stays behind record_refer.
     """
     return _call(
@@ -185,32 +186,35 @@ def record_handoff(
 
 
 @mcp.tool()
-def record_find(query: str, project: str = "", limit: int = 10) -> dict[str, Any]:
+def record_find(query: str, project: str = "", limit: int = 10, offset: int = 0) -> dict[str, Any]:
     """Find addresses that contain an exact string.
 
     query is at least 3 characters: a path, an error code, a tool name, or a
     short phrase. The result is addresses and one-line previews.
-    Open one with record_refer.
+    Pass next_offset as offset to continue. Open one with record_refer.
     """
     return _call(
         lambda: get_store().find(
             query,
             project=project or None,
             limit=limit,
+            offset=offset,
         )
     )
 
 
 @mcp.tool()
-def record_list(project: str = "", limit: int = 50) -> dict[str, Any]:
+def record_list(project: str = "", limit: int = 50, offset: int = 0) -> dict[str, Any]:
     """List filed sessions, newest first.
 
     Pass project to limit the list to one project. Each row has an address
     you can pass to record_map or record_refer.
+    Pass next_offset as offset to continue.
     """
     return _call(
         lambda: get_store().list_sessions(
             project=project or None,
             limit=limit,
+            offset=offset,
         )
     )

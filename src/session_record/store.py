@@ -462,6 +462,8 @@ class RecordStore:
                     """,
                     (session_id, outline_limit + 1, outline_offset),
                 ).fetchall()
+                if outline_offset > 0 and not rows:
+                    raise RecordError("bad_page", "offset is past the end of this part.")
                 outline_truncated = len(rows) > outline_limit
                 outline = [_turn_preview(session_id, row) for row in rows[:outline_limit]]
         tool_index: dict[str, list[str]] = {}
@@ -485,6 +487,9 @@ class RecordStore:
             result["outline"] = outline
             result["outline_offset"] = outline_offset
             result["outline_truncated"] = outline_truncated
+            result["outline_next_offset"] = (
+                outline_offset + len(outline) if outline_truncated else None
+            )
         return result
 
     def refer(self, address: str, *, offset: int = 0, limit: int = REFER_PAGE) -> dict[str, Any]:
@@ -554,10 +559,13 @@ class RecordStore:
         *,
         project: str | None = None,
         limit: int = 50,
+        offset: int = 0,
     ) -> dict[str, Any]:
         """List filed sessions, newest first. This is the way back to an older one."""
         if limit < 1 or limit > 100:
             raise RecordError("bad_page", "limit must be from 1 to 100.")
+        if offset < 0:
+            raise RecordError("bad_page", "offset must be >= 0.")
         self.initialize()
         query = """
             SELECT
@@ -575,10 +583,13 @@ class RecordStore:
         if project is not None and project != "":
             query += " WHERE s.project = ?"
             parameters.append(project)
-        query += " ORDER BY s.filed_at DESC, s.id ASC LIMIT ?"
+        query += " ORDER BY s.filed_at DESC, s.id ASC LIMIT ? OFFSET ?"
         parameters.append(limit + 1)
+        parameters.append(offset)
         with self._connect() as connection:
             rows = connection.execute(query, parameters).fetchall()
+        if offset > 0 and not rows:
+            raise RecordError("bad_page", "offset is past the end of this part.")
         truncated = len(rows) > limit
         sessions = [
             {
@@ -594,7 +605,12 @@ class RecordStore:
             }
             for row in rows[:limit]
         ]
-        return {"sessions": sessions, "truncated": truncated}
+        return {
+            "sessions": sessions,
+            "truncated": truncated,
+            "offset": offset,
+            "next_offset": offset + limit if truncated else None,
+        }
 
     def find(
         self,
@@ -602,6 +618,7 @@ class RecordStore:
         *,
         project: str | None = None,
         limit: int = 10,
+        offset: int = 0,
     ) -> dict[str, Any]:
         """Return addresses whose callback text contains an exact string.
 
@@ -611,6 +628,8 @@ class RecordStore:
         """
         if limit < 1 or limit > FIND_MAX:
             raise RecordError("bad_page", f"limit must be from 1 to {FIND_MAX}.")
+        if offset < 0:
+            raise RecordError("bad_page", "offset must be >= 0.")
         match = _fts_query(query)
         needle = " ".join(query.split()).casefold()
         project_name = project.strip() if isinstance(project, str) else ""
@@ -630,16 +649,24 @@ class RecordStore:
         if project_name:
             statement += " AND s.project = ?"
             parameters.append(project_name)
-        statement += " ORDER BY callbacks_fts.rank, c.address LIMIT ?"
+        statement += " ORDER BY callbacks_fts.rank, c.address LIMIT ? OFFSET ?"
         parameters.append(limit + 1)
+        parameters.append(offset)
         with self._connect() as connection:
             try:
                 rows = connection.execute(statement, parameters).fetchall()
             except sqlite3.OperationalError as exc:
                 raise RecordError("bad_query", "That find text could not be searched.") from exc
+            if offset > 0 and not rows:
+                raise RecordError("bad_page", "offset is past the end of this part.")
             truncated = len(rows) > limit
             matches = [_find_match(connection, row, needle) for row in rows[:limit]]
-        return {"matches": matches, "truncated": truncated}
+        return {
+            "matches": matches,
+            "truncated": truncated,
+            "offset": offset,
+            "next_offset": offset + limit if truncated else None,
+        }
 
 
 def _parse_turn(turn: dict[str, Any]) -> dict[str, Any]:

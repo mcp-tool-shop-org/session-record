@@ -36,6 +36,7 @@ def main(argv: list[str] | None = None) -> int:
         "refer": _refer,
         "list": _list,
         "find": _find,
+        "section": _section,
     }
     command = commands.get(args[0])
     if command is None:
@@ -120,15 +121,40 @@ def _handoff(args: list[str]) -> int:
 
 def _find(args: list[str]) -> int:
     if not args:
-        print("usage: session-record find TEXT [--project NAME] [--limit N]", file=sys.stderr)
+        print(
+            "usage: session-record find TEXT [--project NAME] [--limit N] [--offset N]",
+            file=sys.stderr,
+        )
         return 2
-    flags = _flags(args[1:], valued=("--project", "--limit"), switches=())
+    flags = _flags(args[1:], valued=("--project", "--limit", "--offset"), switches=())
     project = flags.get("--project")
     return _emit(
         _store().find(
             args[0],
             project=None if project is None else str(project),
             limit=_integer(flags.get("--limit"), flag="--limit", default=10),
+            offset=_integer(flags.get("--offset"), flag="--offset", default=0),
+        )
+    )
+
+
+def _section(args: list[str]) -> int:
+    if len(args) < 5:
+        print(_SECTION_USAGE, file=sys.stderr)
+        return 2
+    session_id, slug, kind, title, body, *rest = args
+    flags = _flags(rest, valued=("--source",), switches=())
+    source = flags.get("--source")
+    return _emit(
+        _store().add_section(
+            session_id,
+            slug,
+            kind,
+            title,
+            body,
+            source_ordinal=(
+                None if source is None else _integer(source, flag="--source", default=0)
+            ),
         )
     )
 
@@ -170,12 +196,13 @@ def _refer(args: list[str]) -> int:
 
 
 def _list(args: list[str]) -> int:
-    flags = _flags(args, valued=("--project", "--limit"), switches=())
+    flags = _flags(args, valued=("--project", "--limit", "--offset"), switches=())
     project = flags.get("--project")
     return _emit(
         _store().list_sessions(
             project=None if project is None else str(project),
             limit=_integer(flags.get("--limit"), flag="--limit", default=50),
+            offset=_integer(flags.get("--offset"), flag="--offset", default=0),
         )
     )
 
@@ -250,14 +277,16 @@ Usage:
                                          File a JSON session and print its map
   session-record handoff grok ID TITLE PATH [--project P] [--sections PATH] [--started-at T] [--replace]
                                          File a Grok chat_history.jsonl
+  session-record section SESSION_ID SLUG KIND TITLE BODY [--source N]
+                                         Name one section on a session already filed.
   session-record map ID [--outline-offset N] [--outline-limit N]
                                          Print the map. --outline-limit pages turn previews, 20 at most.
   session-record refer ADDRESS [--offset N] [--limit N]
                                          Print one addressed part. Pass the next offset to continue.
-  session-record find TEXT [--project NAME] [--limit N]
+  session-record find TEXT [--project NAME] [--limit N] [--offset N]
                                          Find addresses for an exact string of at least 3 characters.
-  session-record list [--project NAME] [--limit N]
-                                         List filed sessions, newest first.
+  session-record list [--project NAME] [--limit N] [--offset N]
+                                         List filed sessions, newest first. Pass --offset to continue.
   session-record --version
   session-record --help
 
@@ -268,6 +297,7 @@ sections whose source_ordinal values match the turns it assigns from 0.
 Pass --started-at to record when the session started. Leave it off and
 that time is the moment of filing.
 find returns addresses and one-line previews. refer returns the text.
+Pass --offset to continue a list or a find.
 Set SESSION_RECORD_DB to the sqlite file. Otherwise the server uses
 .session-record/record.sqlite under the home directory.
 """
@@ -280,6 +310,10 @@ _HANDOFF_USAGE = (
 _FILE_USAGE = (
     "usage: session-record file SESSION_ID TITLE PATH "
     "[--project P] [--host H] [--started-at T] [--replace]"
+)
+
+_SECTION_USAGE = (
+    "usage: session-record section SESSION_ID SLUG KIND TITLE BODY [--source N]"
 )
 
 

@@ -33,7 +33,10 @@ def file_grok_transcript(
     except UnicodeDecodeError as exc:
         raise RecordError("bad_transcript", "The transcript must be UTF-8.") from exc
     except OSError as exc:
-        raise RecordError("bad_transcript", "Could not read the transcript.") from exc
+        raise RecordError(
+            "bad_transcript",
+            f"Could not read the transcript at {transcript_path}.",
+        ) from exc
     turns = turns_from_grok_jsonl(text)
     store.file_session(
         session_id,
