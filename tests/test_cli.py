@@ -129,12 +129,65 @@ def test_file_rejects_a_transcript_without_turns(tmp_path, monkeypatch, capsys) 
 def test_file_usage_and_unknown_command(capsys) -> None:
     assert main(["file"]) == 2
     assert "usage:" in capsys.readouterr().err
+    assert main(["map"]) == 2
+    map_usage = capsys.readouterr().err
+    assert "--outline-offset" in map_usage
+    assert "--outline-limit" in map_usage
     assert main(["nope"]) == 2
     assert "Unknown command" in capsys.readouterr().err
     assert main(["--help"]) == 0
-    assert "session-record file" in capsys.readouterr().out
+    help_text = capsys.readouterr().out
+    assert "session-record file" in help_text
+    assert "--outline-offset" in help_text
+    assert "session/turns/N" in help_text
+    assert "session/sections/slug" in help_text
+    assert "at least 3 characters" in help_text
     assert main(["--version"]) == 0
     assert capsys.readouterr().out.startswith("session-record 0.1.0")
+
+
+def test_bad_number_and_bad_file_say_what_to_fix(tmp_path, monkeypatch, capsys) -> None:
+    _db(tmp_path, monkeypatch)
+    assert main(["list", "--limit", "nope"]) == 1
+    error = _read(capsys)["error"]
+    assert error["code"] == "bad_file"
+    assert error["message"] == "--limit needs a whole number"
+
+    assert main(["map", "alpha", "--outline-offset", "1.5"]) == 1
+    error = _read(capsys)["error"]
+    assert error["code"] == "bad_file"
+    assert error["message"] == "--outline-offset needs a whole number"
+
+    session = tmp_path / "session.json"
+    session.write_text("not json", encoding="utf-8")
+    assert main(["file", "alpha", "Title", str(session)]) == 1
+    error = _read(capsys)["error"]
+    assert error["code"] == "bad_file"
+    assert error["message"] == "The session file is not JSON. Check line 1."
+
+    session.write_bytes(b"\xff")
+    assert main(["file", "alpha", "Title", str(session)]) == 1
+    error = _read(capsys)["error"]
+    assert error["code"] == "bad_file"
+    assert error["message"] == "The session file must be UTF-8."
+
+    sections = tmp_path / "sections.json"
+    sections.write_text("{", encoding="utf-8")
+    transcript = tmp_path / "chat_history.jsonl"
+    transcript.write_text(
+        json.dumps({"type": "user", "content": "hello from the handoff"}) + "\n",
+        encoding="utf-8",
+    )
+    assert main(["handoff", "grok", "alpha", "T", str(transcript), "--sections", str(sections)]) == 1
+    error = _read(capsys)["error"]
+    assert error["code"] == "bad_file"
+    assert error["message"] == "The sections file is not JSON. Check line 1."
+
+    sections.write_bytes(b"\xff")
+    assert main(["handoff", "grok", "alpha", "T", str(transcript), "--sections", str(sections)]) == 1
+    error = _read(capsys)["error"]
+    assert error["code"] == "bad_file"
+    assert error["message"] == "The sections file must be UTF-8."
 
 
 def test_serve_starts_the_mcp_transport(monkeypatch) -> None:
