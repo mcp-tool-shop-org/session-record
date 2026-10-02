@@ -66,7 +66,7 @@ def _file(args: list[str]) -> int:
         valued=("--project", "--host", "--started-at"),
         switches=("--replace",),
     )
-    document = json.loads(Path(path).read_text(encoding="utf-8"))
+    document = _read_json(path, label="The session file")
     if not isinstance(document, dict):
         raise RecordError("bad_file", "The session file must be a JSON object.")
     turns = document.get("turns")
@@ -101,7 +101,7 @@ def _handoff(args: list[str]) -> int:
     flags = _flags(rest, valued=("--project", "--sections", "--started-at"), switches=("--replace",))
     sections: list[Any] = []
     if "--sections" in flags:
-        loaded = json.loads(Path(flags["--sections"]).read_text(encoding="utf-8"))
+        loaded = _read_json(flags["--sections"], label="The sections file")
         if not isinstance(loaded, list):
             raise RecordError("bad_file", "sections must be an array.")
         sections = loaded
@@ -128,21 +128,28 @@ def _find(args: list[str]) -> int:
         _store().find(
             args[0],
             project=None if project is None else str(project),
-            limit=_integer(flags.get("--limit"), default=10),
+            limit=_integer(flags.get("--limit"), flag="--limit", default=10),
         )
     )
 
 
 def _map(args: list[str]) -> int:
     if not args:
-        print("usage: session-record map SESSION_ID [--outline-limit N]", file=sys.stderr)
+        print(
+            "usage: session-record map SESSION_ID [--outline-offset N] [--outline-limit N]",
+            file=sys.stderr,
+        )
         return 2
     flags = _flags(args[1:], valued=("--outline-offset", "--outline-limit"), switches=())
     return _emit(
         _store().session_map(
             args[0],
-            outline_offset=_integer(flags.get("--outline-offset"), default=0),
-            outline_limit=_integer(flags.get("--outline-limit"), default=0),
+            outline_offset=_integer(
+                flags.get("--outline-offset"), flag="--outline-offset", default=0
+            ),
+            outline_limit=_integer(
+                flags.get("--outline-limit"), flag="--outline-limit", default=0
+            ),
         )
     )
 
@@ -156,8 +163,8 @@ def _refer(args: list[str]) -> int:
     return _emit(
         _store().refer(
             args[0],
-            offset=_integer(flags.get("--offset"), default=0),
-            limit=_integer(limit, default=4000) if limit is not None else 4000,
+            offset=_integer(flags.get("--offset"), flag="--offset", default=0),
+            limit=_integer(limit, flag="--limit", default=4000) if limit is not None else 4000,
         )
     )
 
@@ -168,7 +175,7 @@ def _list(args: list[str]) -> int:
     return _emit(
         _store().list_sessions(
             project=None if project is None else str(project),
-            limit=_integer(flags.get("--limit"), default=50),
+            limit=_integer(flags.get("--limit"), flag="--limit", default=50),
         )
     )
 
@@ -205,10 +212,27 @@ def _flags(
     return found
 
 
-def _integer(value: str | None, *, default: int) -> int:
+def _read_json(path: str, *, label: str) -> Any:
+    try:
+        text = Path(path).read_text(encoding="utf-8")
+    except UnicodeDecodeError as exc:
+        raise RecordError("bad_file", f"{label} must be UTF-8.") from exc
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError as exc:
+        raise RecordError(
+            "bad_file",
+            f"{label} is not JSON. Check line {exc.lineno}.",
+        ) from exc
+
+
+def _integer(value: str | None, *, flag: str, default: int) -> int:
     if value is None:
         return default
-    return int(value)
+    try:
+        return int(value)
+    except ValueError as exc:
+        raise ValueError(f"{flag} needs a whole number") from exc
 
 
 def _emit(payload: dict[str, Any], *, error: bool = False) -> int:
@@ -222,16 +246,22 @@ _HELP = """session-record — store a session as a record you can refer to
 Usage:
   session-record                         Run the MCP server on stdio
   session-record serve                   Run the MCP server on stdio
-  session-record file ID TITLE PATH      File a JSON session and print its map
-  session-record handoff grok ID TITLE PATH
-                                     File a Grok chat_history.jsonl
-  session-record map ID                  Print the map
-  session-record refer ADDRESS           Print one addressed part
-  session-record find TEXT               Find addresses for an exact string
-  session-record list [--project NAME]   List filed sessions
+  session-record file ID TITLE PATH [--project P] [--host H] [--started-at T] [--replace]
+                                         File a JSON session and print its map
+  session-record handoff grok ID TITLE PATH [--project P] [--sections PATH] [--started-at T] [--replace]
+                                         File a Grok chat_history.jsonl
+  session-record map ID [--outline-offset N] [--outline-limit N]
+                                         Print the map. --outline-limit pages turn previews, 20 at most.
+  session-record refer ADDRESS [--offset N] [--limit N]
+                                         Print one addressed part. Pass the next offset to continue.
+  session-record find TEXT [--project NAME] [--limit N]
+                                         Find addresses for an exact string of at least 3 characters.
+  session-record list [--project NAME] [--limit N]
+                                         List filed sessions, newest first.
   session-record --version
   session-record --help
 
+An address is a session id, session/turns/N, or session/sections/slug.
 The JSON file has a turns array and an optional sections array.
 handoff reads chat_history.jsonl. Pass --sections with a JSON array of
 sections whose source_ordinal values match the turns it assigns from 0.
