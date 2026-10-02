@@ -157,6 +157,7 @@ def test_user_turn_does_not_keep_a_tool_name(tmp_path) -> None:
     assert filed["tools"] == {}
     assert filed["started_at"] != "  "
     assert "T" in filed["started_at"]
+    assert "." in filed["started_at"]
     assert store.refer("alpha/turns/0")["tool_name"] == ""
     system = store.file_session(
         "beta",

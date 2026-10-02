@@ -236,8 +236,15 @@ def test_file_errors_and_mcp_handoff(tmp_path, monkeypatch) -> None:
     import session_record.server as server
 
     server._store = None
-    filed = server.record_handoff("alpha", "Licence pass", str(path), project="widgets")
+    filed = server.record_handoff(
+        "alpha",
+        "Licence pass",
+        str(path),
+        project="widgets",
+        started_at="2026-04-01T00:00:00+00:00",
+    )
     assert filed["outline"][0]["address"] == "alpha/turns/0"
+    assert filed["started_at"] == "2026-04-01T00:00:00+00:00"
     found = server.record_find("handoff", project="widgets")
     assert found["matches"][0]["address"] == "alpha/turns/0"
     assert server.record_find("ab")["error"]["code"] == "bad_query"

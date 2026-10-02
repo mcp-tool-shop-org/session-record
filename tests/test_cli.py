@@ -248,12 +248,15 @@ def test_handoff_then_find(tmp_path, monkeypatch, capsys) -> None:
                 "widgets",
                 "--sections",
                 str(sections),
+                "--started-at",
+                "2026-04-01T00:00:00+00:00",
             ]
         )
         == 0
     )
     filed = _read(capsys)
     assert filed["host"] == "grok"
+    assert filed["started_at"] == "2026-04-01T00:00:00+00:00"
     assert filed["outline"][1]["preview"] == "It is MIT."
     assert "SENTINEL-SECOND-LINE" not in json.dumps(filed)
     assert "SECRET-SYSTEM" not in json.dumps(filed)
