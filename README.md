@@ -21,7 +21,7 @@ A section has a kind (`decision`, `file`, `open`, `note`) and may point at the t
 | Tool | What it does |
 | --- | --- |
 | `record_file` | File the turns, and any sections you already want to name. Returns the map. |
-| `record_handoff` | File a Grok `chat_history.jsonl` from a path. Returns the map and the first page of turn previews. |
+| `record_handoff` | File a Grok `chat_history.jsonl` from a path. Pass `started_at` to record when the session started. Returns the map and the first page of turn previews. |
 | `record_section` | Name one part of a session that is already filed. |
 | `record_map` | Table of contents. Set `outline_limit` (max 20) to page through one-line turn previews. |
 | `record_refer` | One address. Long text comes back in pages; pass `next_offset` to continue. |
@@ -40,7 +40,7 @@ session-record find "ZX-404" --project widgets
 session-record refer alpha/turns/3
 ```
 
-`sections.json` is an array of sections. `source_ordinal` is the turn number the handoff assigns. The command prints the map and the first page of turn previews.
+`sections.json` is an array of sections. `source_ordinal` is the turn number the handoff assigns. Pass `--started-at` to record when the session started. Leave it off and that time is the moment of filing. The command prints the map and the first page of turn previews.
 
 Filing writes one callback row per turn and per section. The row stores a situating prefix plus the verbatim text, and leaves `embedding_id` empty so a later pass can attach a vector to that same address. `record_find` searches the row and returns addresses and one-line previews. A query needs at least 3 characters.
 
