@@ -185,15 +185,31 @@ def test_find_pages_and_notices_a_missing_row(tmp_path) -> None:
     )
     page = store.find("SAME-TOKEN", limit=2)
     assert page["truncated"] is True
+    assert page["offset"] == 0
+    assert page["next_offset"] == 2
     addresses = [row["address"] for row in page["matches"]]
     assert len(addresses) == len(set(addresses)) == 2
-    assert set(addresses) <= {
+    assert all("SAME-TOKEN" in row["preview"] for row in page["matches"])
+    rest = store.find("SAME-TOKEN", limit=2, offset=page["next_offset"])
+    assert rest["truncated"] is False
+    assert rest["offset"] == 2
+    assert rest["next_offset"] is None
+    rest_addresses = [row["address"] for row in rest["matches"]]
+    assert len(rest_addresses) == len(set(rest_addresses)) == 2
+    assert set(addresses).isdisjoint(rest_addresses)
+    assert set(addresses) | set(rest_addresses) == {
         "alpha/turns/0",
         "alpha/turns/1",
         "alpha/turns/2",
         "alpha/sections/note1",
     }
-    assert all("SAME-TOKEN" in row["preview"] for row in page["matches"])
+    assert all("SAME-TOKEN" in row["preview"] for row in rest["matches"])
+    with pytest.raises(RecordError) as past:
+        store.find("SAME-TOKEN", offset=10)
+    assert past.value.code == "bad_page"
+    with pytest.raises(RecordError) as negative_find:
+        store.find("SAME-TOKEN", offset=-1)
+    assert negative_find.value.code == "bad_page"
 
     connection = sqlite3.connect(store.path)
     connection.execute("DELETE FROM turns WHERE session_id = 'alpha' AND ordinal = 0")

@@ -219,6 +219,7 @@ def test_file_errors_and_mcp_handoff(tmp_path, monkeypatch) -> None:
         file_grok_transcript(store, "alpha", "T", str(missing))
     assert missing_error.value.code == "bad_transcript"
     assert "Could not read" in str(missing_error.value)
+    assert str(missing) in str(missing_error.value)
 
     bad_bytes = tmp_path / "bad.jsonl"
     bad_bytes.write_bytes(b"\xff\xfe")
@@ -248,4 +249,6 @@ def test_file_errors_and_mcp_handoff(tmp_path, monkeypatch) -> None:
     found = server.record_find("handoff", project="widgets")
     assert found["matches"][0]["address"] == "alpha/turns/0"
     assert server.record_find("ab")["error"]["code"] == "bad_query"
-    assert server.record_handoff("beta", "T", str(missing))["error"]["code"] == "bad_transcript"
+    missing_handoff = server.record_handoff("beta", "T", str(missing))
+    assert missing_handoff["error"]["code"] == "bad_transcript"
+    assert str(missing) in missing_handoff["error"]["message"]

@@ -237,9 +237,28 @@ def test_pages_offsets_and_list_limit(tmp_path) -> None:
 
     for index in range(3):
         store.file_session(f"s{index}", "T", [_turn()], project="")
-    listed = store.list_sessions(project="", limit=2)
-    assert listed["truncated"] is True
-    assert len(listed["sessions"]) == 2
+    seen: list[str] = []
+    offset = 0
+    for _ in range(10):
+        listed = store.list_sessions(project="", limit=2, offset=offset)
+        assert listed["offset"] == offset
+        seen.extend(row["session_id"] for row in listed["sessions"])
+        if listed["next_offset"] is None:
+            assert listed["truncated"] is False
+            break
+        assert listed["truncated"] is True
+        assert listed["next_offset"] == offset + 2
+        offset = listed["next_offset"]
+    else:
+        raise AssertionError("list did not end")
+    assert len(seen) == len(set(seen))
+    assert {"s0", "s1", "s2"} <= set(seen)
+    with pytest.raises(RecordError) as past:
+        store.list_sessions(offset=100)
+    assert past.value.code == "bad_page"
+    with pytest.raises(RecordError) as negative_offset:
+        store.list_sessions(offset=-1)
+    assert negative_offset.value.code == "bad_page"
     with pytest.raises(RecordError) as bad_limit:
         store.list_sessions(limit=0)
     assert bad_limit.value.code == "bad_page"
