@@ -25,6 +25,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
 ]
 
 [project.scripts]
@@ -39,6 +40,16 @@ packages = ["src/session_record"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+addopts = "-q --cov=session_record --cov-report=term-missing --cov-fail-under=90"
+
+[tool.coverage.run]
+source = ["session_record"]
+branch = false
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true
+skip_covered = false
 
 [tool.ruff]
 target-version = "py311"

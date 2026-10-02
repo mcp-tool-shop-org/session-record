@@ -28,6 +28,18 @@ A section has a kind (`decision`, `file`, `open`, `note`) and may point at the t
 
 `record_list` is how you get back to an older session when you still know the project or the title. Finding a session by meaning, when you no longer have an address, is not in this version.
 
+## File a session from disk
+
+A session file is JSON with a `turns` array and an optional `sections` array.
+
+```bash
+session-record file alpha "Licence pass" session.json --project widgets
+session-record refer alpha/turns/1
+session-record list --project widgets
+```
+
+With no command, `session-record` runs the MCP server.
+
 ## Run
 
 The database file is `SESSION_RECORD_DB`. If that is unset, the server uses `.session-record/record.sqlite` under the home directory. The file stays on this machine.
@@ -53,3 +65,5 @@ python -m venv .venv
 pip install -e ".[dev]"
 pytest
 ```
+
+`pytest` fails when coverage of `session_record` drops below 90%. CI uploads the same report to Codecov, and the project and patch checks use that same 90% bar.
