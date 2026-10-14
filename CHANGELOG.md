@@ -20,3 +20,8 @@ Current version: 0.1.0.
 ### Fixed
 
 - CI upgrades setuptools before `pip-audit`. The Python 3.11 image ships setuptools 79.0.1, which the audit flags.
+
+### Security
+
+- The CI workflow declares `permissions: contents: read` at the top level, so no job gets more than read access unless it sets its own.
+

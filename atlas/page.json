@@ -32,7 +32,7 @@
   "changes": {
     "fileCounts": {
       "added": 0,
-      "changed": 3,
+      "changed": 2,
       "moved": 0,
       "parts": 2,
       "removed": 0
@@ -40,13 +40,13 @@
     "items": [
       {
         "kind": "counts",
-        "sentence": "Nothing structural changed since 2026-10-02; 3 files changed content.",
+        "sentence": "Nothing structural changed since 2026-10-02; 2 files changed content.",
         "subjects": []
       }
     ],
     "since": {
-      "commit": "ca71a3bba0bdfcaf621e8303e5fb472fa3e64877",
-      "generatedAt": "2026-10-02T23:10:03.468Z"
+      "commit": "59a35914e7160ba2626b265bb30e215b1dc456ea",
+      "generatedAt": "2026-10-02T23:11:36.985Z"
     },
     "unchanged": true
   },
@@ -55,7 +55,7 @@
     "Window: 180 days; a pair counts from 3 shared commits, since the window holds fewer than 30 qualifying commits."
   ],
   "changesTogetherWithTests": 0,
-  "commit": "59a35914e7160ba2626b265bb30e215b1dc456ea",
+  "commit": "c791653bb0dda16fc68f61e380087d2940093e50",
   "defaultBranch": "main",
   "derived": "4 parts, mostly Python (11 files). Work enters through 2 doors; the busiest is CI, which reaches 2 parts. People run session-record.",
   "doors": [
@@ -132,9 +132,9 @@
       "to": "src"
     }
   ],
-  "engine": "1.26.0",
+  "engine": "1.24.0",
   "generated": [],
-  "generatedAt": "2026-10-02T23:11:36.985Z",
+  "generatedAt": "2026-10-14T23:40:39.805Z",
   "limits": [
     "1 write and 1 read use paths built at run time and are not named here.",
     "3 reads go to a path their caller passes, not to this repository.",
@@ -154,9 +154,7 @@
   "startDoor": "pyproject.toml#session-record",
   "startHere": [
     "src/session_record/__main__.py",
-    "src/session_record/server.py",
-    "src/session_record/grok.py",
-    "src/session_record/store.py"
+    "src/session_record/server.py"
   ],
   "startReason": "This path follows session-record (a command people run) from its entry, since CI runs only tests.",
   "summary": "A private Python package that stores a session as addresses a later turn can open.",
@@ -165,7 +163,6 @@
   "testedBy": {
     "src": 5
   },
-  "testedCodeParts": 1,
   "unnamedWrites": 1,
   "unread": [],
   "unreadFiles": 0,
