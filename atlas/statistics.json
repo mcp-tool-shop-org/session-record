@@ -78,8 +78,8 @@
     "definition": "commits is how many commits in the window touch the file, including merges and commits dropped from coupling. lines is added plus deleted in those commits.",
     "files": [
       {
-        "commits": 2,
-        "lines": 126,
+        "commits": 3,
+        "lines": 128,
         "path": ".github/workflows/ci.yml"
       },
       {
@@ -88,8 +88,8 @@
         "path": ".gitignore"
       },
       {
-        "commits": 1,
-        "lines": 18,
+        "commits": 2,
+        "lines": 22,
         "path": "CHANGELOG.md"
       },
       {
@@ -103,8 +103,8 @@
         "path": "README.md"
       },
       {
-        "commits": 1,
-        "lines": 45,
+        "commits": 2,
+        "lines": 47,
         "path": "SCORECARD.md"
       },
       {
@@ -118,8 +118,8 @@
         "path": "SHIP_GATE.md"
       },
       {
-        "commits": 1,
-        "lines": 79,
+        "commits": 2,
+        "lines": 87,
         "path": "atlas/README.md"
       },
       {
@@ -128,18 +128,18 @@
         "path": "atlas/boundaries.yaml"
       },
       {
-        "commits": 1,
-        "lines": 160,
+        "commits": 2,
+        "lines": 186,
         "path": "atlas/page.json"
       },
       {
-        "commits": 1,
-        "lines": 211,
+        "commits": 2,
+        "lines": 285,
         "path": "atlas/statistics.json"
       },
       {
-        "commits": 1,
-        "lines": 2082,
+        "commits": 2,
+        "lines": 2090,
         "path": "atlas/structure.json"
       },
       {
@@ -213,9 +213,9 @@
     "level": "low",
     "reason": "fewer than 30 qualifying commits in the window, and fewer than 25 source files reach 10 revisions"
   },
-  "generatedAt": "2026-10-02T23:11:36.985Z",
+  "generatedAt": "2026-10-14T23:40:39.805Z",
   "generatedFrom": {
-    "commit": "59a35914e7160ba2626b265bb30e215b1dc456ea"
+    "commit": "c791653bb0dda16fc68f61e380087d2940093e50"
   },
   "pairs": [],
   "parameters": {
@@ -228,7 +228,7 @@
     "floor": "fallen",
     "floorHeld": false,
     "floorTrigger": "both",
-    "headDate": "2026-10-02T19:10:16-04:00",
+    "headDate": "2026-10-02T19:11:44-04:00",
     "inScopeFiles": 26,
     "pinnedStart": null,
     "priorFloor": "fallen",
@@ -237,7 +237,7 @@
     "revisions": 5,
     "shared": 10,
     "sharedFloorUsed": 3,
-    "since": "2026-04-05T23:10:16.000Z",
+    "since": "2026-04-05T23:11:44.000Z",
     "sourceExtensions": [
       ".js",
       ".mjs",
