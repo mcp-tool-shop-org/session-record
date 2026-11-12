@@ -1,6 +1,6 @@
 # session-record: how it works
 
-Mapped at 2026-10-14 from commit c791653 by Atlas 1.24.0.
+Mapped at 2026-11-11 from commit acaa581 by Atlas 1.26.0.
 
 ## What this is
 
@@ -8,9 +8,9 @@ A private Python package that stores a session as addresses a later turn can ope
 
 4 parts, mostly Python (11 files). Work enters through 2 doors; the busiest is CI, which reaches 2 parts. People run session-record.
 
-## What changed since 2026-10-02 (59a3591)
+## What changed since 2026-10-14 (c791653)
 
-Nothing structural changed since 2026-10-02; 2 files changed content.
+Nothing structural changed since 2026-10-14; no file changed.
 
 ## What comes in
 
@@ -66,7 +66,7 @@ People write .github/ and the repository root; 1 write with a path built at run 
 
 ## Where to start
 
-src/session_record/__main__.py → src/session_record/server.py
+src/session_record/__main__.py → src/session_record/server.py → src/session_record/grok.py → src/session_record/store.py
 
 Read those in order to follow one run of session-record end to end. This path follows session-record (a command people run) from its entry, since CI runs only tests.
 
